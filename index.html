@@ -13,20 +13,24 @@
 
     <!-- Menu -->
     <div>
-      <select id="menu">
-        <option value="display-all">Display All</option>
-        <option value="add">Add</option>
-        <option value="remove">Remove</option>
-        <option value="display-_">Display By ___</option>
-        <option value="display-__">Display by ___</option>
-        <option value="display-___">Display by ___</option>
+      <p>Search 🔎: <input id="search-bar" type="text" /></p>
+      <select id="menu1">
+        <option value="display-song">Display all Songs</option>
+        <option value="display-album">Display all Albums</option>
+        <option value="display-artist">Display all Artists</option>
       </select>
-      <button id="go-btn">Go</button>
+      <button id="menu2-btn">Go</button>
+      <select id="menu2">
+        <option value="display-song">Display Alphabetically</option>
+        <option value="display-album">Display by Year</option>
+        <option value="display-artist">Display by Duration</option>
+      </select>
+      <button id="menu1-btn">Go</button>
     </div>
 
     <!-- Output -->
     <div id="output"></div>
 
-    <script src="script.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>
