@@ -9,7 +9,7 @@ let searchBarEl = document.getElementById("search-bar");
 let selection = searchMenuEl.value;
 
 // Array
-let library;
+let library = []
 
 fetch("music.txt").then(convertData).then(processData);
 
@@ -18,7 +18,7 @@ function convertData(rawData) {
 }
 
 function processData(stringData) {
-  let albums = stringData.split(/\r?\n\n/);
+  let albums = stringData.replace(/(?:\r\n|\r|\n)/g, '\n').split(/\r?\n\n/);
   
   albums.forEach((element) => {
      let props = element.split('\n');
@@ -39,7 +39,7 @@ function processData(stringData) {
         obj.songs.push({name: songs[i], duration: songs[i + 1]});
      }
      
-     albums.push(obj)
+     library.push(obj)
   })
 };
 
