@@ -9,7 +9,7 @@ let searchBarEl = document.getElementById("search-bar");
 let selection = searchMenuEl.value;
 
 // Array
-let library = []
+let library = [];
 
 fetch("music.txt").then(convertData).then(processData);
 
@@ -17,104 +17,57 @@ function convertData(rawData) {
   return rawData.text();
 }
 
-function processData(stringData) {
-  let albums = stringData.replace(/(?:\r\n|\r|\n)/g, '\n').split(/\r?\n\n/);
-  
-  albums.forEach((element) => {
-     let props = element.split('\n');
-     
-     let obj = {
-        name: props[0],
-        release: props[1],
-        genre: props[2],
-        subgenre: props[3],
-        duration: props[4],
-        artist: props[5],
-        songs: [],
-     }
-     
-     let songs = props.slice(6);
-     
-     for (let i = 0; i < songs.length; i += 2) {
-        obj.songs.push({name: songs[i], duration: songs[i + 1]});
-     }
-     
-     library.push(obj)
+function processData() {
+  fetch("https://api.spotify.com/v1/me/albums", {
+    headers: new Headers({
+      Authorization:
+        "Bearer BQAHgPsRiYS1-QwouAr4MuKtgpgqUI08XEh2whmf1gvS-JbioZMQedYYqLL5wscGxjW3tYn3-zcga7eQxjEg83XIPHw2eWHW8IL-hFHv2soNEMFxDotxQvad5SsPOAVpF3N9ixT5E42iTlWlAlMVqM3yzdxSRMM_AzwkJ9ICL-SmqicRTJacsZcg8etqwEqVzCwG8ZPYOkhjjWeX0PeGb0Vy",
+    }),
   })
-};
+    .then((response) => response.json())
+    .then((data) => displayAlbums(data));
 
+  function displayAlbums(data) {
+    library = JSON.stringify(data);
+    // console.log(data.items[i].album.name);
+    console.log(data);
+    for (let i = 0; i < library.length; i++) {
+      outputEl.innerHTML +=
+        data.items[i].album.name +
+        " - " +
+        " 1." +
+        data.items[i].album.tracks.items[0].name +
+        " 2." +
+        data.items[i].album.tracks.items[1].name +
+        " 3." +
+        data.items[i].album.tracks.items[2].name;
+    }
+  }
 
-// function createArray() {
-//   library = [
-//     (album = {
-//       name: albumName,
-//       year: albumYear,
-//       genre: albumGenre,
-//       subgenre: albumSubgenre,
-//       duration: albumDuration,
-//       artist: albumArtist,
-//       songs: [
-//         (song1 = {
-//           duration: songDuration,
-//         }),
-//         (song2 = {
-//           duration: songDuration,
-//         }),
-//         (song3 = {
-//           duration: songDuration,
-//         }),
-//         (song4 = {
-//           duration: songDuration,
-//         }),
-//         (song5 = {
-//           duration: songDuration,
-//         }),
-//         (song6 = {
-//           duration: songDuration,
-//         }),
-//         (song7 = {
-//           duration: songDuration,
-//         }),
-//         (song8 = {
-//           duration: songDuration,
-//         }),
-//         (song9 = {
-//           duration: songDuration,
-//         }),
-//         (song10 = {
-//           duration: songDuration,
-//         }),
-//         (song11 = {
-//           duration: songDuration,
-//         }),
-//         (song12 = {
-//           duration: songDuration,
-//         }),
-//         (song13 = {
-//           duration: songDuration,
-//         }),
-//         (song14 = {
-//           duration: songDuration,
-//         }),
-//         (song15 = {
-//           duration: songDuration,
-//         }),
-//         (song16 = {
-//           duration: songDuration,
-//         }),
-//       ],
-//     }),
-//   ];
-// }
+  //   let albums = stringData.replace(/(?:\r\n|\r|\n)/g, "\n").split(/\r?\n\n/);
 
-// search
-// function search() {
-//   if (selection === "album") {
-//     searchAlbums();
-//   } else if (selection === "song") {
-//     searchSongs();
-//   }
-// }
+  //   albums.forEach((element) => {
+  //     let props = element.split("\n");
+
+  //     let obj = {
+  //       name: props[0],
+  //       release: props[1],
+  //       genre: props[2],
+  //       subgenre: props[3],
+  //       duration: props[4],
+  //       artist: props[5],
+  //       songs: [],
+  //     };
+
+  //     let songs = props.slice(6);
+
+  //     for (let i = 0; i < songs.length; i += 2) {
+  //       obj.songs.push({ name: songs[i], duration: songs[i + 1] });
+  //     }
+
+  //     library.push(obj);
+  //   });
+}
 
 searchBarEl.addEventListener("keydown", searchBarHandler);
 
