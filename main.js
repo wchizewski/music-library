@@ -11,6 +11,10 @@ let selection = searchMenuEl.value;
 // Array
 let library = [];
 
+let token =
+  "BQAhOV9dGnik8VVeDaWOmMDUdldf-d_D98iTOn-zjQgw1FGGIxhUkEno0EnJe2b9iX_mJw0r1J5YLu7kppqrnYwWugMdN4zC2tgesVyVkxLDmekMZrTGWsWdAIpYzVSiLlQerry2sqijKv4XzD3DGXJ89QNtzHV79Ueoad4px5yh6YuOpbKggUFyV7Hc42ag5B5Tc7nY9WQQlXNO";
+let albumNum = 250;
+
 fetch("music.txt").then(convertData).then(processData);
 
 function convertData(rawData) {
@@ -19,39 +23,39 @@ function convertData(rawData) {
 
 function processData() {
   let totalData = [];
-  for (let offset = 0; offset < 300; offset += 50) {
+  for (let offset = 0; offset < albumNum; offset += 50) {
     fetch(`https://api.spotify.com/v1/me/albums?limit=50&offset=${offset}`, {
       headers: new Headers({
-        Authorization:
-          "Bearer BQAD6hv2aeMfMTDlICH4WV3mOUsaJwh0_8U_YpU_-GNl15waZQXBVDv3VCLCwIXyC3mCS-b8vEyOP9Af4ppGwVu_RyNBVLhBf5gBFkKG7ngTwy3rSH3qA_Zig8ELr0s10tSe6v-YZ52Q9GUBNGqBjzMvmQQALH-8dlTKMZMpMiR598ZfOOZqiVLeYJV7rRMzHFXFvqqM0JTi18nW",
+        Authorization: `Bearer ${token}`,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        totalData.push(data);
-        if (offset === 250) {
-          console.log(
-            totalData[0].items.concat(totalData[1].items, totalData[2].items)
-          );
-          displayAlbums(totalData);
+        if (data.error) return console.log(data.error.message);
+
+        totalData.push(data.items);
+
+        if (totalData.length === albumNum / 50) {
+          let albums = totalData.flat();
+          library = albums;
+          displayAlbums(albums);
         }
       });
   }
 
-  function displayAlbums(data) {
-    library = totalData;
-    // console.log(data.items[i].album.name);
+  function displayAlbums(albums) {
+    // console.log(data.items[i].album.name);\
+    let divStr = "";
     for (let i = 0; i < library.length; i++) {
-      outputEl.innerHTML +=
-        data.items[i].album.name +
-        " - " +
-        " 1." +
-        data.items[i].album.tracks.items[0].name +
-        " 2." +
-        data.items[i].album.tracks.items[1].name +
-        " 3." +
-        data.items[i].album.tracks.items[2].name;
+      // for (let i2 = 0; i2 < library[i].album.artists.length; i++) {
+      divStr += `
+      <div>
+        <p><h2><img src="${library[i].album.images[1].url}">${library[i].album.name}</h2><h3>${library[i].album.artists[0].name}</h3><h4>${library[i].album.release_date}</h4></p>
+      </div>
+      `;
+      // }
     }
+    outputEl.innerHTML = divStr;
   }
 
   //   let albums = stringData.replace(/(?:\r\n|\r|\n)/g, "\n").split(/\r?\n\n/);
