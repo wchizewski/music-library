@@ -18,19 +18,29 @@ function convertData(rawData) {
 }
 
 function processData() {
-  fetch("https://api.spotify.com/v1/me/albums", {
-    headers: new Headers({
-      Authorization:
-        "Bearer BQAHgPsRiYS1-QwouAr4MuKtgpgqUI08XEh2whmf1gvS-JbioZMQedYYqLL5wscGxjW3tYn3-zcga7eQxjEg83XIPHw2eWHW8IL-hFHv2soNEMFxDotxQvad5SsPOAVpF3N9ixT5E42iTlWlAlMVqM3yzdxSRMM_AzwkJ9ICL-SmqicRTJacsZcg8etqwEqVzCwG8ZPYOkhjjWeX0PeGb0Vy",
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => displayAlbums(data));
+  let totalData = [];
+  for (let offset = 0; offset < 300; offset += 50) {
+    fetch(`https://api.spotify.com/v1/me/albums?limit=50&offset=${offset}`, {
+      headers: new Headers({
+        Authorization:
+          "Bearer BQAD6hv2aeMfMTDlICH4WV3mOUsaJwh0_8U_YpU_-GNl15waZQXBVDv3VCLCwIXyC3mCS-b8vEyOP9Af4ppGwVu_RyNBVLhBf5gBFkKG7ngTwy3rSH3qA_Zig8ELr0s10tSe6v-YZ52Q9GUBNGqBjzMvmQQALH-8dlTKMZMpMiR598ZfOOZqiVLeYJV7rRMzHFXFvqqM0JTi18nW",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        totalData.push(data);
+        if (offset === 250) {
+          console.log(
+            totalData[0].items.concat(totalData[1].items, totalData[2].items)
+          );
+          displayAlbums(totalData);
+        }
+      });
+  }
 
   function displayAlbums(data) {
-    library = JSON.stringify(data);
+    library = totalData;
     // console.log(data.items[i].album.name);
-    console.log(data);
     for (let i = 0; i < library.length; i++) {
       outputEl.innerHTML +=
         data.items[i].album.name +
