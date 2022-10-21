@@ -12,7 +12,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQAhOV9dGnik8VVeDaWOmMDUdldf-d_D98iTOn-zjQgw1FGGIxhUkEno0EnJe2b9iX_mJw0r1J5YLu7kppqrnYwWugMdN4zC2tgesVyVkxLDmekMZrTGWsWdAIpYzVSiLlQerry2sqijKv4XzD3DGXJ89QNtzHV79Ueoad4px5yh6YuOpbKggUFyV7Hc42ag5B5Tc7nY9WQQlXNO";
+  "BQDdFj1GUIS7q0P72q2qojpXqsgqWkuMv9lJnwGvOh4JZdLSS8Qns9fR6WuZAyewn4sW9KCq8NAwH2uf4pF7cjdsiA9ewutLrH_vi3azxUcdquCqqNMk5CMoAcjDJqhfaWg6T-5ht_zOzgBCMugWwF005mx25SDpT7T5aqP5ZZ4cR2OQVMlsGjabJXvYXOpqrSaEbUxDmWVRUgIB";
 let albumNum = 250;
 
 fetch("music.txt").then(convertData).then(processData);
@@ -50,7 +50,7 @@ function processData() {
       // for (let i2 = 0; i2 < library[i].album.artists.length; i++) {
       divStr += `
       <div>
-        <p><h2><img src="${library[i].album.images[1].url}">${library[i].album.name}</h2><h3>${library[i].album.artists[0].name}</h3><h4>${library[i].album.release_date}</h4></p>
+        <p><img src="${library[i].album.images[1].url}"><h2>${library[i].album.name}</h2><h3>${library[i].album.artists[0].name}</h3><h4>${library[i].album.release_date}</h4></p>
       </div>
       `;
       // }
