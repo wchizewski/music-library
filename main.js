@@ -12,7 +12,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQBM6PMiWfCtdLKKE6wNSStOuHCyzs8L-SOfv3_7kQ6wGnk5SfFFW__p3K5SIa4FDW_a_Afev-VvkV2vR8z4zy8e4wzwoIufcz3w8sAxY5ykP60IMAvPGU3HjKT9h8lmJ6HaUMQvl3EAGbB5g7-6W-ddbtRYQqNUKc8QKMtODPCfua2n5yAzhliNvxWTSL1Z47CxykIO8ZrChTJ7";
+  "BQD0vz-Ic4ExbPGlFmx_L4hgHLB3D3gAbtL6qguQWqbhXSi6_mAWUBSmZJXRYUIVX-sKFeraHslbbrcD7khOMqevFTiXQAly_tcYt0MeBCgJsdPUIWJIY5fFCvuPbiTDVZai-NrI0T7voQj6NY9WsULS9CqH6YWxgnLtjX0R4OIQvub1ciy8EkxGZIInlr_s8S0jGiwlCgn684bX";
 let albumNum = 250;
 
 fetch("music.txt").then(convertData).then(processData);
@@ -47,34 +47,38 @@ function processData() {
     let divStr = "";
     for (let i = 0; i < library.length; i++) {
       let artists = library[i].album.artists;
-      let artistString = '';
-        artists.forEach((artist, index) => {
-          if (index + 1 == artists.length) {
-            artistString += artist.name
-          } else {
-            artistString += artist.name + ', '
-            console.log(artistString)
-          }
-        })
+      let artistString = "";
+      artists.forEach((artist, index) => {
+        if (index + 1 == artists.length) {
+          artistString += artist.name;
+        } else {
+          artistString += artist.name + ", ";
+        }
+      });
 
+      let album = library[i].album;
       divStr += `
       <div>
         <p>
-        <img src="${library[i].album.images[1].url}">
-        <h2>${library[i].album.name}</h2>
+        <img src="${album.images[1].url}">
+        <h2>${album.name}</h2>
         <h3>${artistString}</h3>
-        <h4>${library[i].album.release_date}</h4>
+        <h4>${album.release_date}</h4>
         </p>
       </div>
       `;
     }
     outputEl.innerHTML = divStr;
-    sortAlbumsAlphabetically()
+    sortAlbumsAlphabetically();
   }
 }
 
 function sortAlbumsAlphabetically() {
-
+  // for (let i = 0; i < library.length; i++) {
+  //   library.sort((a, b) => {
+  //     return a.library[i].album.name > b.library[i].album.name ? 1 : -1;
+  //   });
+  // }
 }
 
 searchBarEl.addEventListener("keyup", searchBarHandler);
@@ -82,18 +86,44 @@ searchBarEl.addEventListener("keyup", searchBarHandler);
 function searchBarHandler(event) {
   let divStr = "";
   for (let i = 0; i < library.length; i++) {
-    if (library[i].album.name.toLowerCase().includes(searchBarEl.value.toLowerCase())) {
+    let album = library[i].album;
+    let artists = library[i].album.artists;
+    let artistString = "";
+    artists.forEach((artist, index) => {
+      if (index + 1 == artists.length) {
+        artistString += artist.name;
+      } else {
+        artistString += artist.name + ", ";
+      }
+    });
+    if (
+      library[i].album.name.toLowerCase().includes(
+        searchBarEl.value.toLowerCase()
+        // ||
+        // artistString.toLowerCase().includes(searchBarEl.value.toLowerCase())
+      )
+    ) {
       divStr += `
       <div>
         <p>
-        <img src="${library[i].album.images[1].url}">
-        <h2>${library[i].album.name}</h2>
-        <h3>${library[i].album.artists[0].name}</h3>
-        <h4>${library[i].album.release_date}</h4>
+        <img src="${album.images[1].url}">
+        <h2>${album.name}</h2>
+        <h3>${artistString}</h3>
+        <h4>${album.release_date}</h4>
         </p>
       </div>
       `;
     }
   }
   outputEl.innerHTML = divStr;
+}
+
+outputEl.addEventListener("click", openAlbum);
+
+function openAlbum() {
+  let albumTracks = "";
+  for (let i = 0; i < library.length; i++) {
+    console.log(library[8].album.tracks.items[i].name);
+  }
+  outputEl.innerHTML = albumTracks;
 }
