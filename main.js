@@ -1,7 +1,7 @@
 // Music Library
 
 // elements
-let menu1El = document.getElementById("menu1");
+// let menu1El = document.getElementById("menu1");
 let menu2El = document.getElementById("menu2");
 let outputEl = document.getElementById("output");
 let searchMenuEl = document.getElementById("search-menu");
@@ -12,8 +12,8 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQCdYsfN_hI45lq7NX7YirGUEFECal-HvRoaIFiftq0q2D9No8YuhOBfYfonEBQoCPitaDmigY2QB55AGnRlLKxMODsQSV886auusl9p87kL33pnR92A3zTi--Bq3iLtgLGODCwrfS9YbJPXDJ7WVt_05UsEJLQMCQDTOKu_J-O70Zg2Wx1fEOeX5NhjgGYJMlGewR_CZfC2RBE3";
-let albumNum = 250;
+  "BQAaqV9iH0xlIndZDcFPzJWVqJicEZGlBgI1rhGDN-I6LbS4FqNHq1HvqW8-Z34v7qH8lR6kKew5i7ZNwBO4qIKpEuXduTNUzC0yzFibJJwkEyFAigH7GkrgcaeZeY1Qnxpa2nCTFreqzXkN6tR0-vTsbUQAuBe-Itqy6cHiJw04AXKByPPttkXCYOisJmohfS77ByRgcdIZhOYk";
+let albumNum = 300;
 
 fetch("music.txt").then(convertData).then(processData);
 
@@ -43,14 +43,41 @@ function processData() {
       });
   }
 
+  document.getElementById("menu2-btn").addEventListener("click", goBtn2Handler);
+
+  function goBtn2Handler() {
+    // Get Menu Selection
+    let selection = menu2El.value;
+
+    if (selection === "display-alphabetically") {
+      sortAlbumsAlphabetically();
+    } else if (selection === "display-by-year") {
+      sortAlbumsYear();
+    } else if (selection === "display-by-artist") {
+      sortAlbumsArtist();
+    }
+  }
+
   function sortAlbumsAlphabetically() {
     library.sort((a, b) => {
       return a.album.name > b.album.name ? 1 : -1;
     });
   }
 
+  // function sortAlbumsYear() {
+  //   library.sort((0, albumNum) => {
+  //     return
+  //   })
+  // }
+
+  function sortAlbumsArtist() {
+    library.sort((a, b) => {
+      return a.album.artists[0].name > b.album.artists[0].name ? 1 : -1;
+    });
+  }
+
   function displayAlbums() {
-    sortAlbumsAlphabetically();
+    sortAlbumsArtist();
     let divStr = "";
     for (let i = 0; i < library.length; i++) {
       let artists = library[i].album.artists;
@@ -96,7 +123,9 @@ function searchBarHandler(event) {
       }
     });
     if (
-      library[i].album.name.toLowerCase().includes(searchBarEl.value.toLowerCase()) ||
+      library[i].album.name
+        .toLowerCase()
+        .includes(searchBarEl.value.toLowerCase()) ||
       artistString.toLowerCase().includes(searchBarEl.value.toLowerCase())
     ) {
       divStr += `
@@ -114,9 +143,8 @@ function searchBarHandler(event) {
   outputEl.innerHTML = divStr;
 }
 
-
 function openAlbum() {
-  console.log("hi")
+  console.log("hi");
   // let albumTracks = "";
   // for (let i = 0; i < library.length; i++) {
   //   console.log(library[i].album.tracks.items[i].name);
