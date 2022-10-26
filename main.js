@@ -12,7 +12,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQD0vz-Ic4ExbPGlFmx_L4hgHLB3D3gAbtL6qguQWqbhXSi6_mAWUBSmZJXRYUIVX-sKFeraHslbbrcD7khOMqevFTiXQAly_tcYt0MeBCgJsdPUIWJIY5fFCvuPbiTDVZai-NrI0T7voQj6NY9WsULS9CqH6YWxgnLtjX0R4OIQvub1ciy8EkxGZIInlr_s8S0jGiwlCgn684bX";
+  "BQCdYsfN_hI45lq7NX7YirGUEFECal-HvRoaIFiftq0q2D9No8YuhOBfYfonEBQoCPitaDmigY2QB55AGnRlLKxMODsQSV886auusl9p87kL33pnR92A3zTi--Bq3iLtgLGODCwrfS9YbJPXDJ7WVt_05UsEJLQMCQDTOKu_J-O70Zg2Wx1fEOeX5NhjgGYJMlGewR_CZfC2RBE3";
 let albumNum = 250;
 
 fetch("music.txt").then(convertData).then(processData);
@@ -43,7 +43,14 @@ function processData() {
       });
   }
 
+  function sortAlbumsAlphabetically() {
+    library.sort((a, b) => {
+      return a.album.name > b.album.name ? 1 : -1;
+    });
+  }
+
   function displayAlbums() {
+    sortAlbumsAlphabetically();
     let divStr = "";
     for (let i = 0; i < library.length; i++) {
       let artists = library[i].album.artists;
@@ -57,8 +64,8 @@ function processData() {
       });
 
       let album = library[i].album;
-      divStr += `
-      <div>
+      outputEl.innerHTML += `
+      <div id=album${i}>
         <p>
         <img src="${album.images[1].url}">
         <h2>${album.name}</h2>
@@ -67,18 +74,10 @@ function processData() {
         </p>
       </div>
       `;
-    }
-    outputEl.innerHTML = divStr;
-    sortAlbumsAlphabetically();
-  }
-}
 
-function sortAlbumsAlphabetically() {
-  // for (let i = 0; i < library.length; i++) {
-  //   library.sort((a, b) => {
-  //     return a.library[i].album.name > b.library[i].album.name ? 1 : -1;
-  //   });
-  // }
+      document.getElementById(`album${i}`).addEventListener("click", openAlbum);
+    }
+  }
 }
 
 searchBarEl.addEventListener("keyup", searchBarHandler);
@@ -97,11 +96,8 @@ function searchBarHandler(event) {
       }
     });
     if (
-      library[i].album.name.toLowerCase().includes(
-        searchBarEl.value.toLowerCase()
-        // ||
-        // artistString.toLowerCase().includes(searchBarEl.value.toLowerCase())
-      )
+      library[i].album.name.toLowerCase().includes(searchBarEl.value.toLowerCase()) ||
+      artistString.toLowerCase().includes(searchBarEl.value.toLowerCase())
     ) {
       divStr += `
       <div>
@@ -118,12 +114,12 @@ function searchBarHandler(event) {
   outputEl.innerHTML = divStr;
 }
 
-outputEl.addEventListener("click", openAlbum);
 
 function openAlbum() {
-  let albumTracks = "";
-  for (let i = 0; i < library.length; i++) {
-    console.log(library[8].album.tracks.items[i].name);
-  }
-  outputEl.innerHTML = albumTracks;
+  console.log("hi")
+  // let albumTracks = "";
+  // for (let i = 0; i < library.length; i++) {
+  //   console.log(library[i].album.tracks.items[i].name);
+  // }
+  // outputEl.innerHTML = albumTracks;
 }
