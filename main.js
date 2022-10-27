@@ -12,7 +12,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQAaqV9iH0xlIndZDcFPzJWVqJicEZGlBgI1rhGDN-I6LbS4FqNHq1HvqW8-Z34v7qH8lR6kKew5i7ZNwBO4qIKpEuXduTNUzC0yzFibJJwkEyFAigH7GkrgcaeZeY1Qnxpa2nCTFreqzXkN6tR0-vTsbUQAuBe-Itqy6cHiJw04AXKByPPttkXCYOisJmohfS77ByRgcdIZhOYk";
+  "BQDVBS6I33S99cXvWAeovgg8MfjEbxUUZ1YMsN81LjF2xpuYKiy7qYwggy2GT-gI9NC8xoTWGot2IKXgfxS36hA2o0wajLkI1-B1OfsA16655Ewn-2tfMAMYO9uwp6DVO3z4tCCWchbtNakFkmMFXe_kzCFwQhg3CUb7xGB6x1eygSWUfoZu3hIUXVihox56iUmUYAMY7fgEj4Z0";
 let albumNum = 300;
 
 fetch("music.txt").then(convertData).then(processData);
@@ -42,56 +42,61 @@ function processData() {
         }
       });
   }
+}
 
-  document.getElementById("menu2-btn").addEventListener("click", goBtn2Handler);
+document.getElementById("menu2-btn").addEventListener("click", goBtn2Handler);
 
-  function goBtn2Handler() {
-    // Get Menu Selection
-    let selection = menu2El.value;
+function goBtn2Handler() {
+  // Get Menu Selection
+  let selection = menu2El.value;
 
-    if (selection === "display-alphabetically") {
-      sortAlbumsAlphabetically();
-    } else if (selection === "display-by-year") {
-      sortAlbumsYear();
-    } else if (selection === "display-by-artist") {
-      sortAlbumsArtist();
-    }
-  }
-
-  function sortAlbumsAlphabetically() {
-    library.sort((a, b) => {
-      return a.album.name > b.album.name ? 1 : -1;
-    });
-  }
-
-  // function sortAlbumsYear() {
-  //   library.sort((0, albumNum) => {
-  //     return
-  //   })
-  // }
-
-  function sortAlbumsArtist() {
-    library.sort((a, b) => {
-      return a.album.artists[0].name > b.album.artists[0].name ? 1 : -1;
-    });
-  }
-
-  function displayAlbums() {
+  if (selection === "display-alphabetically") {
+    sortAlbumsAlphabetically();
+  } else if (selection === "display-by-year") {
+    sortAlbumsYear();
+  } else if (selection === "display-by-artist") {
     sortAlbumsArtist();
-    let divStr = "";
-    for (let i = 0; i < library.length; i++) {
-      let artists = library[i].album.artists;
-      let artistString = "";
-      artists.forEach((artist, index) => {
-        if (index + 1 == artists.length) {
-          artistString += artist.name;
-        } else {
-          artistString += artist.name + ", ";
-        }
-      });
+  }
+}
 
-      let album = library[i].album;
-      outputEl.innerHTML += `
+function sortAlbumsAlphabetically() {
+  library.sort((a, b) => {
+    return a.album.name > b.album.name ? 1 : -1;
+  });
+  outputEl.innerHTML = library;
+  displayAlbums();
+}
+
+// function sortAlbumsYear() {
+//   library.sort((0, albumNum) => {
+//     return
+//   })
+// }
+
+function sortAlbumsArtist() {
+  library.sort((a, b) => {
+    return a.album.artists[0].name > b.album.artists[0].name ? 1 : -1;
+  });
+  outputEl.innerHTML = library;
+  displayAlbums();
+}
+
+function displayAlbums() {
+  // sortAlbumsAlphabetically();
+  let divStr = "";
+  for (let i = 0; i < library.length; i++) {
+    let artists = library[i].album.artists;
+    let artistString = "";
+    artists.forEach((artist, index) => {
+      if (index + 1 == artists.length) {
+        artistString += artist.name;
+      } else {
+        artistString += artist.name + ", ";
+      }
+    });
+
+    let album = library[i].album;
+    outputEl.innerHTML += `
       <div id=album${i}>
         <p>
         <img src="${album.images[1].url}">
@@ -101,9 +106,9 @@ function processData() {
         </p>
       </div>
       `;
-
-      document.getElementById(`album${i}`).addEventListener("click", openAlbum);
-    }
+  }
+  for (let i = 0; i < library.length; i++) {
+    document.getElementById(`album${i}`).addEventListener("click", openAlbum);
   }
 }
 
@@ -147,7 +152,9 @@ function openAlbum() {
   console.log("hi");
   // let albumTracks = "";
   // for (let i = 0; i < library.length; i++) {
-  //   console.log(library[i].album.tracks.items[i].name);
+  //   let tracks = library[i].album.tracks;
+  //   console.log(tracks.items[i].name);
+  //   albumTracks = tracks.items[i].name;
   // }
   // outputEl.innerHTML = albumTracks;
 }
