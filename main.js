@@ -12,14 +12,9 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQDVBS6I33S99cXvWAeovgg8MfjEbxUUZ1YMsN81LjF2xpuYKiy7qYwggy2GT-gI9NC8xoTWGot2IKXgfxS36hA2o0wajLkI1-B1OfsA16655Ewn-2tfMAMYO9uwp6DVO3z4tCCWchbtNakFkmMFXe_kzCFwQhg3CUb7xGB6x1eygSWUfoZu3hIUXVihox56iUmUYAMY7fgEj4Z0";
+  "BQDw0LytOmi4ughp8ihmn2wp8lgmz64vQ6luj-qNhXCy7ZLjY6sMO0Pa5OkMSL3LZiySStAF7w4HoUBtwxTjX8FOmd5U26m9kpqhqyoBz_3adhJ0Hl9L7EvTtgmYfJb187paOwSDlWefwFYp67_aKbR-sZ4aIDmkqc9-JSwhVuKDNKWX7S6z_gV2x0LBDwbB3EWVpQYW4t6zj5ti";
 let albumNum = 300;
-
-fetch("music.txt").then(convertData).then(processData);
-
-function convertData(rawData) {
-  return rawData.text();
-}
+processData();
 
 function processData() {
   let totalData = [];
@@ -31,8 +26,6 @@ function processData() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.error) return console.log(data.error.message);
-
         totalData.push(data.items);
 
         if (totalData.length === albumNum / 50) {
@@ -44,27 +37,27 @@ function processData() {
   }
 }
 
+// Sorting Albums
 document.getElementById("menu2-btn").addEventListener("click", goBtn2Handler);
 
 function goBtn2Handler() {
   // Get Menu Selection
-  let selection = menu2El.value;
-
-  if (selection === "display-alphabetically") {
-    sortAlbumsAlphabetically();
-  } else if (selection === "display-by-year") {
-    sortAlbumsYear();
-  } else if (selection === "display-by-artist") {
-    sortAlbumsArtist();
-  }
+  // let selection = menu2El.value;
+  // if (selection === "display-alphabetically") {
+  //   sortAlbumsAlphabetically();
+  // } else if (selection === "display-by-year") {
+  //   sortAlbumsYear();
+  // } else if (selection === "display-by-artist") {
+  //   sortAlbumsArtist();
+  // }
 }
 
 function sortAlbumsAlphabetically() {
   library.sort((a, b) => {
     return a.album.name > b.album.name ? 1 : -1;
   });
-  outputEl.innerHTML = library;
-  displayAlbums();
+  // outputEl.innerHTML = library;
+  // displayAlbums();
 }
 
 // function sortAlbumsYear() {
@@ -73,16 +66,16 @@ function sortAlbumsAlphabetically() {
 //   })
 // }
 
-function sortAlbumsArtist() {
-  library.sort((a, b) => {
-    return a.album.artists[0].name > b.album.artists[0].name ? 1 : -1;
-  });
-  outputEl.innerHTML = library;
-  displayAlbums();
-}
+// function sortAlbumsArtist() {
+//   library.sort((a, b) => {
+//     return a.album.artists[0].name > b.album.artists[0].name ? 1 : -1;
+//   });
+//   outputEl.innerHTML = library;
+//   displayAlbums();
+// }
 
 function displayAlbums() {
-  // sortAlbumsAlphabetically();
+  sortAlbumsAlphabetically();
   let divStr = "";
   for (let i = 0; i < library.length; i++) {
     let artists = library[i].album.artists;
@@ -97,7 +90,7 @@ function displayAlbums() {
 
     let album = library[i].album;
     outputEl.innerHTML += `
-      <div id=album${i}>
+      <div id=album${i} data-id=${i}>
         <p>
         <img src="${album.images[1].url}">
         <h2>${album.name}</h2>
@@ -148,13 +141,17 @@ function searchBarHandler(event) {
   outputEl.innerHTML = divStr;
 }
 
-function openAlbum() {
-  console.log("hi");
+function openAlbum(e) {
+  let albumIndex = +e.currentTarget.dataset.id;
+  let trackItems = library[albumIndex].album.tracks.items;
+  for (let i = 0; i < trackItems.length; i++) {
+    outputEl.innerHTML = trackItems[i].name;
+    console.log(trackItems[i].name);
+  }
+
   // let albumTracks = "";
   // for (let i = 0; i < library.length; i++) {
   //   let tracks = library[i].album.tracks;
   //   console.log(tracks.items[i].name);
-  //   albumTracks = tracks.items[i].name;
   // }
-  // outputEl.innerHTML = albumTracks;
 }
