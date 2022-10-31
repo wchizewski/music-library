@@ -4,6 +4,7 @@
 // let menu1El = document.getElementById("menu1");
 let menu2El = document.getElementById("menu2");
 let outputEl = document.getElementById("output");
+let albumOutputEl = document.getElementById("album-output");
 let searchMenuEl = document.getElementById("search-menu");
 let searchBarEl = document.getElementById("search-bar");
 let selection = searchMenuEl.value;
@@ -12,7 +13,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQDZ3r5JrLkBg5SQlkcZvXSPgEB20UXi1NmwEWD-DtFW6fCdybxUhmXpZjEMHB7rRfXKpeorz8TLuIkMTIpsF4HVb1ui2e1ZugGZ9W-68qmo37MBBeNP_f1x7CSFRk9w30pUeu_0pnl_WswNQelsiZhp8i42GPZrrkhEToluq3zQoyIu_L7YRrCpTJHfTDEuGYbAUNdnG4bAAC6j";
+  "BQAAQKWWJ5cGPk1QyFSjKSync-GHzqM3oiGQt6MY6MwMXzegLpj7MpHzWfSGywnkubv7aoI1w63pGnlNVTPsvvIGi9DQuwT4-6wQQYpmO3tBeebyctZud7LPXb8Y4yiszF1sPNrSUKptq0IUFoU1gIjy399-e-aYnt3w3SQXAjq7_LhxgwSlu-IwCUOBzjJf7GQtmWA7jV0twVLW";
 let albumNum = 300;
 processData();
 
@@ -67,13 +68,17 @@ function sortAlbumsAlphabetically() {
 
 function sortAlbumsArtist() {
   library.sort((a, b) => {
-    return a.album.artists[0].name.toLowerCase() > b.album.artists[0].name.toLowerCase() ? 1 : -1;
+    return a.album.artists[0].name.toLowerCase() >
+      b.album.artists[0].name.toLowerCase()
+      ? 1
+      : -1;
   });
   displayAlbums();
 }
 
 function displayAlbums() {
-  outputEl.innerHTML = ""
+  outputEl.innerHTML = "";
+  // albumOutputEl.innerHTML = "";
   for (let i = 0; i < library.length; i++) {
     let artists = library[i].album.artists;
     let artistString = "";
@@ -96,7 +101,6 @@ function displayAlbums() {
         </p>
       </div>
       `;
-
   }
   for (let i = 0; i < library.length; i++) {
     document.getElementById(`album${i}`).addEventListener("click", openAlbum);
@@ -106,6 +110,7 @@ function displayAlbums() {
 searchBarEl.addEventListener("keyup", searchBarHandler);
 
 function searchBarHandler(event) {
+  // albumOutputEl.innerHTML = "";
   let divStr = "";
   for (let i = 0; i < library.length; i++) {
     let album = library[i].album;
@@ -142,14 +147,27 @@ function searchBarHandler(event) {
 function openAlbum(e) {
   let albumIndex = +e.currentTarget.dataset.id;
   let trackItems = library[albumIndex].album.tracks.items;
+  outputEl.innerHTML = "";
   for (let i = 0; i < trackItems.length; i++) {
-    // outputEl.innerHTML = trackItems[i].name;
-    console.log(trackItems[i].name);
+    let album = library[albumIndex].album;
+    let artists = library[albumIndex].album.artists;
+    let artistString = "";
+    artists.forEach((artist, index) => {
+      if (index + 1 == artists.length) {
+        artistString += artist.name;
+      } else {
+        artistString += artist.name + ", ";
+      }
+    });
+    albumOutputEl.innerHTML += `
+    <div>
+      <p>
+      <img src="${album.images[1].url}">
+      <h1>${album.name}</h1>
+      <h3>${artistString}</h3>
+      <p>${trackItems[i].name}</p>
+      </p>
+    </div>
+    `;
   }
-
-  // let albumTracks = "";
-  // for (let i = 0; i < library.length; i++) {
-  //   let tracks = library[i].album.tracks;
-  //   console.log(tracks.items[i].name);
-  // }
 }
