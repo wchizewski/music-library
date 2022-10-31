@@ -12,7 +12,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQDw0LytOmi4ughp8ihmn2wp8lgmz64vQ6luj-qNhXCy7ZLjY6sMO0Pa5OkMSL3LZiySStAF7w4HoUBtwxTjX8FOmd5U26m9kpqhqyoBz_3adhJ0Hl9L7EvTtgmYfJb187paOwSDlWefwFYp67_aKbR-sZ4aIDmkqc9-JSwhVuKDNKWX7S6z_gV2x0LBDwbB3EWVpQYW4t6zj5ti";
+  "BQDZ3r5JrLkBg5SQlkcZvXSPgEB20UXi1NmwEWD-DtFW6fCdybxUhmXpZjEMHB7rRfXKpeorz8TLuIkMTIpsF4HVb1ui2e1ZugGZ9W-68qmo37MBBeNP_f1x7CSFRk9w30pUeu_0pnl_WswNQelsiZhp8i42GPZrrkhEToluq3zQoyIu_L7YRrCpTJHfTDEuGYbAUNdnG4bAAC6j";
 let albumNum = 300;
 processData();
 
@@ -31,7 +31,7 @@ function processData() {
         if (totalData.length === albumNum / 50) {
           let albums = totalData.flat();
           library = albums;
-          displayAlbums();
+          sortAlbumsAlphabetically();
         }
       });
   }
@@ -42,22 +42,21 @@ document.getElementById("menu2-btn").addEventListener("click", goBtn2Handler);
 
 function goBtn2Handler() {
   // Get Menu Selection
-  // let selection = menu2El.value;
-  // if (selection === "display-alphabetically") {
-  //   sortAlbumsAlphabetically();
-  // } else if (selection === "display-by-year") {
-  //   sortAlbumsYear();
-  // } else if (selection === "display-by-artist") {
-  //   sortAlbumsArtist();
-  // }
+  let selection = menu2El.value;
+  if (selection === "display-alphabetically") {
+    sortAlbumsAlphabetically();
+  } else if (selection === "display-by-year") {
+    sortAlbumsYear();
+  } else if (selection === "display-by-artist") {
+    sortAlbumsArtist();
+  }
 }
 
 function sortAlbumsAlphabetically() {
   library.sort((a, b) => {
-    return a.album.name > b.album.name ? 1 : -1;
+    return a.album.name.toLowerCase() > b.album.name.toLowerCase() ? 1 : -1;
   });
-  // outputEl.innerHTML = library;
-  // displayAlbums();
+  displayAlbums();
 }
 
 // function sortAlbumsYear() {
@@ -66,17 +65,15 @@ function sortAlbumsAlphabetically() {
 //   })
 // }
 
-// function sortAlbumsArtist() {
-//   library.sort((a, b) => {
-//     return a.album.artists[0].name > b.album.artists[0].name ? 1 : -1;
-//   });
-//   outputEl.innerHTML = library;
-//   displayAlbums();
-// }
+function sortAlbumsArtist() {
+  library.sort((a, b) => {
+    return a.album.artists[0].name.toLowerCase() > b.album.artists[0].name.toLowerCase() ? 1 : -1;
+  });
+  displayAlbums();
+}
 
 function displayAlbums() {
-  sortAlbumsAlphabetically();
-  let divStr = "";
+  outputEl.innerHTML = ""
   for (let i = 0; i < library.length; i++) {
     let artists = library[i].album.artists;
     let artistString = "";
@@ -99,6 +96,7 @@ function displayAlbums() {
         </p>
       </div>
       `;
+
   }
   for (let i = 0; i < library.length; i++) {
     document.getElementById(`album${i}`).addEventListener("click", openAlbum);
@@ -145,7 +143,7 @@ function openAlbum(e) {
   let albumIndex = +e.currentTarget.dataset.id;
   let trackItems = library[albumIndex].album.tracks.items;
   for (let i = 0; i < trackItems.length; i++) {
-    outputEl.innerHTML = trackItems[i].name;
+    // outputEl.innerHTML = trackItems[i].name;
     console.log(trackItems[i].name);
   }
 
