@@ -13,7 +13,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQAAQKWWJ5cGPk1QyFSjKSync-GHzqM3oiGQt6MY6MwMXzegLpj7MpHzWfSGywnkubv7aoI1w63pGnlNVTPsvvIGi9DQuwT4-6wQQYpmO3tBeebyctZud7LPXb8Y4yiszF1sPNrSUKptq0IUFoU1gIjy399-e-aYnt3w3SQXAjq7_LhxgwSlu-IwCUOBzjJf7GQtmWA7jV0twVLW";
+  "BQC3PPfBOBgEmT6112niPoUbTE-0pXySo2LCqjqEiUs0bO08FhoOu08ggIF8dpxpXQdy9jTPwiSzAJ45HQo7fJ4wB7TgKN88P-7HI-O3vufHsG4EjW8FGk0d5-2BYPsBtODLK0VoK_eM0EG0ZSufxaptPLKro7hBq9Lg3nG__c7cBFgSY2s1o-F47eeywy3h9rWROI8aLD-ihHrK";
 let albumNum = 300;
 processData();
 
@@ -44,29 +44,43 @@ document.getElementById("menu2-btn").addEventListener("click", goBtn2Handler);
 function goBtn2Handler() {
   // Get Menu Selection
   let selection = menu2El.value;
-  if (selection === "display-alphabetically") {
+  if (selection === "sort-alphabetically") {
     sortAlbumsAlphabetically();
-  } else if (selection === "display-by-year") {
-    sortAlbumsYear();
-  } else if (selection === "display-by-artist") {
+  } else if (selection === "sort-by-oldest") {
+    sortAlbumsOld();
+  } else if (selection === "sort-by-newest") {
+    sortAlbumsNew();
+  } else if (selection === "sort-by-artist") {
     sortAlbumsArtist();
   }
 }
 
 function sortAlbumsAlphabetically() {
+  albumOutputEl.innerHTML = "";
   library.sort((a, b) => {
     return a.album.name.toLowerCase() > b.album.name.toLowerCase() ? 1 : -1;
   });
   displayAlbums();
 }
 
-// function sortAlbumsYear() {
-//   library.sort((0, albumNum) => {
-//     return
-//   })
-// }
+function sortAlbumsOld() {
+  albumOutputEl.innerHTML = "";
+  library.sort((a, b) => {
+    return a.album.release_date > b.album.release_date ? 1 : -1;
+  });
+  displayAlbums();
+}
+
+function sortAlbumsNew() {
+  albumOutputEl.innerHTML = "";
+  library.sort((a, b) => {
+    return a.album.release_date < b.album.release_date ? 1 : -1;
+  });
+  displayAlbums();
+}
 
 function sortAlbumsArtist() {
+  albumOutputEl.innerHTML = "";
   library.sort((a, b) => {
     return a.album.artists[0].name.toLowerCase() >
       b.album.artists[0].name.toLowerCase()
@@ -78,7 +92,6 @@ function sortAlbumsArtist() {
 
 function displayAlbums() {
   outputEl.innerHTML = "";
-  // albumOutputEl.innerHTML = "";
   for (let i = 0; i < library.length; i++) {
     let artists = library[i].album.artists;
     let artistString = "";
@@ -110,7 +123,7 @@ function displayAlbums() {
 searchBarEl.addEventListener("keyup", searchBarHandler);
 
 function searchBarHandler(event) {
-  // albumOutputEl.innerHTML = "";
+  albumOutputEl.innerHTML = "";
   let divStr = "";
   for (let i = 0; i < library.length; i++) {
     let album = library[i].album;
@@ -147,27 +160,29 @@ function searchBarHandler(event) {
 function openAlbum(e) {
   let albumIndex = +e.currentTarget.dataset.id;
   let trackItems = library[albumIndex].album.tracks.items;
+  let album = library[albumIndex].album;
   outputEl.innerHTML = "";
-  for (let i = 0; i < trackItems.length; i++) {
-    let album = library[albumIndex].album;
-    let artists = library[albumIndex].album.artists;
-    let artistString = "";
-    artists.forEach((artist, index) => {
-      if (index + 1 == artists.length) {
-        artistString += artist.name;
-      } else {
-        artistString += artist.name + ", ";
-      }
-    });
-    albumOutputEl.innerHTML += `
+  let artists = library[albumIndex].album.artists;
+  let artistString = "";
+  artists.forEach((artist, index) => {
+    if (index + 1 == artists.length) {
+      artistString += artist.name;
+    } else {
+      artistString += artist.name + ", ";
+    }
+  });
+  albumOutputEl.innerHTML = `
     <div>
       <p>
       <img src="${album.images[1].url}">
       <h1>${album.name}</h1>
-      <h3>${artistString}</h3>
-      <p>${trackItems[i].name}</p>
+      <h3>${artistString} • ${album.release_date}</h3>
       </p>
     </div>
+    `;
+  for (let i = 0; i < trackItems.length; i++) {
+    albumOutputEl.innerHTML += `
+    <p id="tracks">${trackItems[i].name}</p>
     `;
   }
 }

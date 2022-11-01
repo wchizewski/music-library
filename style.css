@@ -21,3 +21,7 @@ img {
 h2 {
   display: inline-block;
 }
+
+#tracks {
+  border: 0.5px solid black;
+}
