@@ -13,7 +13,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQC3PPfBOBgEmT6112niPoUbTE-0pXySo2LCqjqEiUs0bO08FhoOu08ggIF8dpxpXQdy9jTPwiSzAJ45HQo7fJ4wB7TgKN88P-7HI-O3vufHsG4EjW8FGk0d5-2BYPsBtODLK0VoK_eM0EG0ZSufxaptPLKro7hBq9Lg3nG__c7cBFgSY2s1o-F47eeywy3h9rWROI8aLD-ihHrK";
+  "BQCYKK4axfSIdj_hYxVm5nVME2VUKmn6suggc6qQl5Ya075E1qesrO1-E1a-hASOyxbEeKQRuh3bsPs4bctiGcff_leMyqIEub-LWn89EaK4P-StdadBy34Tmusi1dMXNiop97L576ajlg05yDtivcKlu3bNgs9WE9SLNEnU-x1d-6XAr2H_-DKbEB_6ZObNkG_evFV9Xh7omOT4";
 let albumNum = 300;
 processData();
 
@@ -182,7 +182,9 @@ function openAlbum(e) {
     `;
   for (let i = 0; i < trackItems.length; i++) {
     albumOutputEl.innerHTML += `
-    <p id="tracks">${trackItems[i].name}</p>
+    <p id="tracks">${trackItems[i].name}<span>${
+      trackItems[i].duration_ms / 60000
+    }</span><input type="checkbox" data-id="${i}"></p>
     `;
   }
 }
