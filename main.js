@@ -13,7 +13,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQDRtKsWJ2CfxCN_5OuHEDKJPxOpPm-rkwT7TB6bVWy7bc3b--dBrBMWjRXZsTThZhxTtxM_8NqLHOCldAJauI85vwMDULPaTbOukiOJ3hAuTxoS23d4PAzoYBiMr35NhQ7eDe0ZsfiyE57w6bgK7gmRBSLUhK1MfRjQ8m18in-ZnrxeTG4_WxnTJnjqQXST6afKH2LzrHBTPCR-";
+  "BQA9bvM66gH33RUmf4d26KBCs0ImEw7a66pMiw_Ume5xAoIj5KRxFwDitnRJH-6bMblJ4xtDDMZyRX3ZdWD6VSXHswEd-o2b7A9HvKRTbjZ3xErmBprPv_40DpIeYt7VVh5uZ-jyUvU_9q1PUxQe0ktHNN7Lq9Io4IWtDpcFTKA9SYVLI6rx5WIIvFISkhw9ydyozDpjFXyXLVGe";
 let albumNum = 300;
 processData();
 
@@ -154,7 +154,7 @@ function searchBarHandler(event) {
       `;
     }
   }
-  
+
   outputEl.innerHTML = divStr;
 }
 
@@ -183,9 +183,19 @@ function openAlbum(e) {
     `;
   for (let i = 0; i < trackItems.length; i++) {
     albumOutputEl.innerHTML += `
-    <p id="tracks">${trackItems[i].name}<span>${
+    <p id="tracks" data-id="${i}">${trackItems[i].name}<span>${
       trackItems[i].duration_ms / 60000
-    }</span><input type="checkbox" data-id="${i}"></p>
+    }</span><input type="checkbox" id="like-btn${i}" data-id="${i}"></p>
     `;
   }
+  for (let i = 0; i < trackItems.length; i++) {
+    document.getElementById(`like-btn${i}`).addEventListener("input", likeSong);
+  }
+}
+
+function likeSong(e) {
+  let albumIndex = +e.currentTarget.dataset.id;
+  let trackItems = library[albumIndex].album.tracks.items;
+  console.log("hi");
+  localStorage.setItem("album-output", JSON.stringify(trackItems));
 }
