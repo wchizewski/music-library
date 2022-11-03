@@ -13,7 +13,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQCYKK4axfSIdj_hYxVm5nVME2VUKmn6suggc6qQl5Ya075E1qesrO1-E1a-hASOyxbEeKQRuh3bsPs4bctiGcff_leMyqIEub-LWn89EaK4P-StdadBy34Tmusi1dMXNiop97L576ajlg05yDtivcKlu3bNgs9WE9SLNEnU-x1d-6XAr2H_-DKbEB_6ZObNkG_evFV9Xh7omOT4";
+  "BQDRtKsWJ2CfxCN_5OuHEDKJPxOpPm-rkwT7TB6bVWy7bc3b--dBrBMWjRXZsTThZhxTtxM_8NqLHOCldAJauI85vwMDULPaTbOukiOJ3hAuTxoS23d4PAzoYBiMr35NhQ7eDe0ZsfiyE57w6bgK7gmRBSLUhK1MfRjQ8m18in-ZnrxeTG4_WxnTJnjqQXST6afKH2LzrHBTPCR-";
 let albumNum = 300;
 processData();
 
@@ -143,7 +143,7 @@ function searchBarHandler(event) {
       artistString.toLowerCase().includes(searchBarEl.value.toLowerCase())
     ) {
       divStr += `
-      <div>
+      <div id=album${i} data-id=${i}>
         <p>
         <img src="${album.images[1].url}">
         <h2>${album.name}</h2>
@@ -154,6 +154,7 @@ function searchBarHandler(event) {
       `;
     }
   }
+  
   outputEl.innerHTML = divStr;
 }
 
