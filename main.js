@@ -13,7 +13,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQA9bvM66gH33RUmf4d26KBCs0ImEw7a66pMiw_Ume5xAoIj5KRxFwDitnRJH-6bMblJ4xtDDMZyRX3ZdWD6VSXHswEd-o2b7A9HvKRTbjZ3xErmBprPv_40DpIeYt7VVh5uZ-jyUvU_9q1PUxQe0ktHNN7Lq9Io4IWtDpcFTKA9SYVLI6rx5WIIvFISkhw9ydyozDpjFXyXLVGe";
+  "BQAAn0E4pvUxy_vth1x9od3tJaTeNv-uAPQq0lk2Rj6ba3HK24FA_slfI4N4YfVVOQEdribouxirds4fbRYTADqcQ4ZVjyrB2NUp0C0zJdNesqufgo1KebX87RRMdcqxwXtaGYn37UAFU5YsZ-5kTvHOxxd6peXk-90pbn1KSone_wdEqcbjUhFqipWJqdOneBomBEZSFK-9HYlf";
 let albumNum = 300;
 processData();
 
@@ -94,12 +94,12 @@ function displayAlbums() {
   outputEl.innerHTML = "";
   for (let i = 0; i < library.length; i++) {
     let artists = library[i].album.artists;
-    let artistString = "";
+    let artistStr = "";
     artists.forEach((artist, index) => {
       if (index + 1 == artists.length) {
-        artistString += artist.name;
+        artistStr += artist.name;
       } else {
-        artistString += artist.name + ", ";
+        artistStr += artist.name + ", ";
       }
     });
 
@@ -109,7 +109,7 @@ function displayAlbums() {
         <p>
         <img src="${album.images[1].url}">
         <h2>${album.name}</h2>
-        <h3>${artistString}</h3>
+        <h3>${artistStr}</h3>
         <h4>${album.release_date}</h4>
         </p>
       </div>
@@ -128,28 +128,26 @@ function searchBarHandler(event) {
   for (let i = 0; i < library.length; i++) {
     let album = library[i].album;
     let artists = library[i].album.artists;
-    let artistString = "";
+    let artistStr = "";
     artists.forEach((artist, index) => {
       if (index + 1 == artists.length) {
-        artistString += artist.name;
+        artistStr += artist.name;
       } else {
-        artistString += artist.name + ", ";
+        artistStr += artist.name + ", ";
       }
     });
     if (
       library[i].album.name
         .toLowerCase()
         .includes(searchBarEl.value.toLowerCase()) ||
-      artistString.toLowerCase().includes(searchBarEl.value.toLowerCase())
+      artistStr.toLowerCase().includes(searchBarEl.value.toLowerCase())
     ) {
       divStr += `
       <div id=album${i} data-id=${i}>
-        <p>
         <img src="${album.images[1].url}">
         <h2>${album.name}</h2>
-        <h3>${artistString}</h3>
+        <h3>${artistStr}</h3>
         <h4>${album.release_date}</h4>
-        </p>
       </div>
       `;
     }
@@ -158,18 +156,42 @@ function searchBarHandler(event) {
   outputEl.innerHTML = divStr;
 }
 
+function getAlbumDiv(albumObj, artistStr, i) {
+  // img
+  let imgEl = document.createElement("img");
+  imgEl.src = albumObj.images[1].url;
+
+  // h2
+  let h2El = document.createElement("h2");
+  h2El.innerHTML = albumObj.name;
+
+  // h3
+  let h3El = document.createElement("h3");
+  h3El.innerHTML = artistStr;
+
+  // h4
+  let h4El = document.createElement("h4");
+  h4El.innerHTML = albumObj.release_date;
+
+  // div
+  let divEl = document.createElement("div");
+  divEl.dataset.i = i
+  divEl.addEventListener("click", openAlbum)
+
+}
+
 function openAlbum(e) {
   let albumIndex = +e.currentTarget.dataset.id;
   let trackItems = library[albumIndex].album.tracks.items;
   let album = library[albumIndex].album;
   outputEl.innerHTML = "";
   let artists = library[albumIndex].album.artists;
-  let artistString = "";
+  let artistStr = "";
   artists.forEach((artist, index) => {
     if (index + 1 == artists.length) {
-      artistString += artist.name;
+      artistStr += artist.name;
     } else {
-      artistString += artist.name + ", ";
+      artistStr += artist.name + ", ";
     }
   });
   albumOutputEl.innerHTML = `
@@ -177,7 +199,7 @@ function openAlbum(e) {
       <p>
       <img src="${album.images[1].url}">
       <h1>${album.name}</h1>
-      <h3>${artistString} • ${album.release_date}</h3>
+      <h3>${artistStr} • ${album.release_date}</h3>
       </p>
     </div>
     `;
