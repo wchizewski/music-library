@@ -13,7 +13,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQAAn0E4pvUxy_vth1x9od3tJaTeNv-uAPQq0lk2Rj6ba3HK24FA_slfI4N4YfVVOQEdribouxirds4fbRYTADqcQ4ZVjyrB2NUp0C0zJdNesqufgo1KebX87RRMdcqxwXtaGYn37UAFU5YsZ-5kTvHOxxd6peXk-90pbn1KSone_wdEqcbjUhFqipWJqdOneBomBEZSFK-9HYlf";
+  "BQDNSNZMD6_amr2JPH7CgqVwr4E0dIXu5egvDWBh6ZSKO5lR49N2piggR6m6v9k6NTXlN4ankR22pegyT82cNXvlHmIqZlfmaN62b7Tbj04KHwaLP7ZGkBFo51g6_MyZPZScWVeJbWY9UrLfAeswswWl7EZBnrOzdovnYH_xNV-w9JLVbCECvIwT402MiyxdVRzIzsDkzVuToRne";
 let albumNum = 300;
 processData();
 
@@ -104,20 +104,21 @@ function displayAlbums() {
     });
 
     let album = library[i].album;
-    outputEl.innerHTML += `
-      <div id=album${i} data-id=${i}>
-        <p>
-        <img src="${album.images[1].url}">
-        <h2>${album.name}</h2>
-        <h3>${artistStr}</h3>
-        <h4>${album.release_date}</h4>
-        </p>
-      </div>
-      `;
+    outputEl.appendChild(getAlbumDiv(album, artistStr, index));
+    // `
+    //   <div id=album${i} data-id=${i}>
+    //     <p>
+    //     <img src="${album.images[1].url}">
+    //     <h2>${album.name}</h2>
+    //     <h3>${artistStr}</h3>
+    //     <h4>${album.release_date}</h4>
+    //     </p>
+    //   </div>
+    //   `;
   }
-  for (let i = 0; i < library.length; i++) {
-    document.getElementById(`album${i}`).addEventListener("click", openAlbum);
-  }
+  // for (let i = 0; i < library.length; i++) {
+  //   document.getElementById(`album${i}`).addEventListener("click", openAlbum);
+  // }
 }
 
 searchBarEl.addEventListener("keyup", searchBarHandler);
@@ -156,14 +157,14 @@ function searchBarHandler(event) {
   outputEl.innerHTML = divStr;
 }
 
-function getAlbumDiv(albumObj, artistStr, i) {
+function getAlbumDiv(album, artistStr, index) {
   // img
   let imgEl = document.createElement("img");
-  imgEl.src = albumObj.images[1].url;
+  imgEl.src = album.images[1].url;
 
   // h2
   let h2El = document.createElement("h2");
-  h2El.innerHTML = albumObj.name;
+  h2El.innerHTML = album.name;
 
   // h3
   let h3El = document.createElement("h3");
@@ -171,12 +172,16 @@ function getAlbumDiv(albumObj, artistStr, i) {
 
   // h4
   let h4El = document.createElement("h4");
-  h4El.innerHTML = albumObj.release_date;
+  h4El.innerHTML = album.release_date;
 
   // div
   let divEl = document.createElement("div");
-  divEl.dataset.i = i
+  divEl.dataset.i = index
   divEl.addEventListener("click", openAlbum)
+  divEl.appendChild(imgEl)
+  divEl.appendChild(h2El)
+  divEl.appendChild(h3El)
+  divEl.appendChild(h4El)
 
 }
 
