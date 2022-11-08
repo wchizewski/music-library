@@ -13,7 +13,7 @@ let selection = searchMenuEl.value;
 let library = [];
 
 let token =
-  "BQDNSNZMD6_amr2JPH7CgqVwr4E0dIXu5egvDWBh6ZSKO5lR49N2piggR6m6v9k6NTXlN4ankR22pegyT82cNXvlHmIqZlfmaN62b7Tbj04KHwaLP7ZGkBFo51g6_MyZPZScWVeJbWY9UrLfAeswswWl7EZBnrOzdovnYH_xNV-w9JLVbCECvIwT402MiyxdVRzIzsDkzVuToRne";
+  "BQDfJ_wkVlsMwOsr-_pLf-rDUBVSeQQi3l-QQtjE2NGYTfWKZGoyEixlsAcWSqztHXdUIy3Ig2P7jHAb4hMQLRnLeLyVupp7G3HjyUZD9e8aKIXymnEF1nRzLybGhbXsPib3N1D3t2Mc2eoOYfXR_wnHFdfTVp3vjwTkAfpgSdPn7t0sKIaefMl6TNgx-_rV4XWCEtycHFQQwEGG";
 let albumNum = 300;
 processData();
 
@@ -104,7 +104,7 @@ function displayAlbums() {
     });
 
     let album = library[i].album;
-    outputEl.appendChild(getAlbumDiv(album, artistStr, index));
+    outputEl.appendChild(getAlbumDiv(album, artistStr, i));
     // `
     //   <div id=album${i} data-id=${i}>
     //     <p>
@@ -143,21 +143,14 @@ function searchBarHandler(event) {
         .includes(searchBarEl.value.toLowerCase()) ||
       artistStr.toLowerCase().includes(searchBarEl.value.toLowerCase())
     ) {
-      divStr += `
-      <div id=album${i} data-id=${i}>
-        <img src="${album.images[1].url}">
-        <h2>${album.name}</h2>
-        <h3>${artistStr}</h3>
-        <h4>${album.release_date}</h4>
-      </div>
-      `;
+      divStr = getAlbumDiv(album, artistStr, i);
     }
   }
 
-  outputEl.innerHTML = divStr;
+  outputEl = divStr
 }
 
-function getAlbumDiv(album, artistStr, index) {
+function getAlbumDiv(album, artistStr, i) {
   // img
   let imgEl = document.createElement("img");
   imgEl.src = album.images[1].url;
@@ -176,13 +169,14 @@ function getAlbumDiv(album, artistStr, index) {
 
   // div
   let divEl = document.createElement("div");
-  divEl.dataset.i = index
-  divEl.addEventListener("click", openAlbum)
-  divEl.appendChild(imgEl)
-  divEl.appendChild(h2El)
-  divEl.appendChild(h3El)
-  divEl.appendChild(h4El)
+  divEl.dataset.i = i;
+  divEl.addEventListener("click", openAlbum);
+  divEl.appendChild(imgEl);
+  divEl.appendChild(h2El);
+  divEl.appendChild(h3El);
+  divEl.appendChild(h4El);
 
+  return divEl
 }
 
 function openAlbum(e) {
