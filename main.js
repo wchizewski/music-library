@@ -12,8 +12,9 @@ let selection = searchMenuEl.value;
 // Array
 let library = [];
 
+// Token
 let token =
-  "BQDfJ_wkVlsMwOsr-_pLf-rDUBVSeQQi3l-QQtjE2NGYTfWKZGoyEixlsAcWSqztHXdUIy3Ig2P7jHAb4hMQLRnLeLyVupp7G3HjyUZD9e8aKIXymnEF1nRzLybGhbXsPib3N1D3t2Mc2eoOYfXR_wnHFdfTVp3vjwTkAfpgSdPn7t0sKIaefMl6TNgx-_rV4XWCEtycHFQQwEGG";
+  "BQABO9hse7Aw83kie5yJvXgXaf5pj63v4lIQtQf60ue9hrRECijm9Us_rPyNrbW-fRDt3PH77ypl6BN5pSzO8HHBjnceEjJFhr8_iNzQys8_tllUmM6ayRvlky9k4xzDuB5-_4VRNysXmVdblZf_P-sY71fuTHOXGWInVUe_8kk5jNuzLIx-3QBv00UZt68uVQoVHkVYTylkTp3o";
 let albumNum = 300;
 processData();
 
@@ -90,6 +91,7 @@ function sortAlbumsArtist() {
   displayAlbums();
 }
 
+// Display albums
 function displayAlbums() {
   outputEl.innerHTML = "";
   for (let i = 0; i < library.length; i++) {
@@ -102,41 +104,34 @@ function displayAlbums() {
         artistStr += artist.name + ", ";
       }
     });
-
+    // let artistStr = getArtistStr();
     let album = library[i].album;
     outputEl.appendChild(getAlbumDiv(album, artistStr, i));
-    // `
-    //   <div id=album${i} data-id=${i}>
-    //     <p>
-    //     <img src="${album.images[1].url}">
-    //     <h2>${album.name}</h2>
-    //     <h3>${artistStr}</h3>
-    //     <h4>${album.release_date}</h4>
-    //     </p>
-    //   </div>
-    //   `;
   }
   // for (let i = 0; i < library.length; i++) {
   //   document.getElementById(`album${i}`).addEventListener("click", openAlbum);
   // }
 }
 
+// Search
 searchBarEl.addEventListener("keyup", searchBarHandler);
 
 function searchBarHandler(event) {
   albumOutputEl.innerHTML = "";
-  let divStr = "";
+  outputEl.innerHTML = "";
+  let divStr;
   for (let i = 0; i < library.length; i++) {
     let album = library[i].album;
-    let artists = library[i].album.artists;
-    let artistStr = "";
-    artists.forEach((artist, index) => {
-      if (index + 1 == artists.length) {
-        artistStr += artist.name;
-      } else {
-        artistStr += artist.name + ", ";
-      }
-    });
+    // let artists = library[i].album.artists;
+    // let artistStr = "";
+    // artists.forEach((artist, index) => {
+    //   if (index + 1 == artists.length) {
+    //     artistStr += artist.name;
+    //   } else {
+    //     artistStr += artist.name + ", ";
+    //   }
+    // });
+    let artistStr = getArtistStr();
     if (
       library[i].album.name
         .toLowerCase()
@@ -144,10 +139,24 @@ function searchBarHandler(event) {
       artistStr.toLowerCase().includes(searchBarEl.value.toLowerCase())
     ) {
       divStr = getAlbumDiv(album, artistStr, i);
+      outputEl.appendChild(divStr);
     }
   }
+}
 
-  outputEl = divStr
+function getArtistStr() {
+  let artistStr = "";
+  for (let i = 0; i < 3; i++) {
+    let artists = library[i].album.artists;
+    artists.forEach((artist, index) => {
+      if (index + 1 == artists.length) {
+        artistStr += artist.name;
+      } else {
+        artistStr += artist.name + ", ";
+      }
+    });
+  }
+  return artistStr;
 }
 
 function getAlbumDiv(album, artistStr, i) {
@@ -169,18 +178,19 @@ function getAlbumDiv(album, artistStr, i) {
 
   // div
   let divEl = document.createElement("div");
-  divEl.dataset.i = i;
+  divEl.dataset.index = i;
   divEl.addEventListener("click", openAlbum);
   divEl.appendChild(imgEl);
   divEl.appendChild(h2El);
   divEl.appendChild(h3El);
   divEl.appendChild(h4El);
 
-  return divEl
+  return divEl;
 }
 
-function openAlbum(e) {
-  let albumIndex = +e.currentTarget.dataset.id;
+function openAlbum(divEl) {
+  let albumIndex = divEl.dataset.i;
+  console.log(i);
   let trackItems = library[albumIndex].album.tracks.items;
   let album = library[albumIndex].album;
   outputEl.innerHTML = "";
