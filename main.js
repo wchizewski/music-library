@@ -14,7 +14,7 @@ let library = [];
 
 // Token
 let token =
-  "BQABO9hse7Aw83kie5yJvXgXaf5pj63v4lIQtQf60ue9hrRECijm9Us_rPyNrbW-fRDt3PH77ypl6BN5pSzO8HHBjnceEjJFhr8_iNzQys8_tllUmM6ayRvlky9k4xzDuB5-_4VRNysXmVdblZf_P-sY71fuTHOXGWInVUe_8kk5jNuzLIx-3QBv00UZt68uVQoVHkVYTylkTp3o";
+  "BQDc399G8PI44Ph935IY-KaVoDFJWULIN0zID9pkAUiai88NfGpqoYs0nj1zSiv-E6dJxhi8I3YLP71hW-UyAczc5iEZ9XED1KzPl2yPFax5jJQnjXSJ8uCCSggMuqxffoui8hCqgXui8z2p3ADYJGT2cSxsf8F_eeUSAQkjaAupZp8pxB9xGb9TZ1QAXnKzgPXIy4WbF_ZaWNzJ";
 let albumNum = 300;
 processData();
 
@@ -122,16 +122,16 @@ function searchBarHandler(event) {
   let divStr;
   for (let i = 0; i < library.length; i++) {
     let album = library[i].album;
-    // let artists = library[i].album.artists;
-    // let artistStr = "";
-    // artists.forEach((artist, index) => {
-    //   if (index + 1 == artists.length) {
-    //     artistStr += artist.name;
-    //   } else {
-    //     artistStr += artist.name + ", ";
-    //   }
-    // });
-    let artistStr = getArtistStr();
+    let artists = album.artists;
+    let artistStr = "";
+    artists.forEach((artist, index) => {
+      if (index + 1 == artists.length) {
+        artistStr += artist.name;
+      } else {
+        artistStr += artist.name + ", ";
+      }
+    });
+    // let artistStr = getArtistStr();
     if (
       library[i].album.name
         .toLowerCase()
@@ -147,7 +147,8 @@ function searchBarHandler(event) {
 function getArtistStr() {
   let artistStr = "";
   for (let i = 0; i < 3; i++) {
-    let artists = library[i].album.artists;
+    let album = library[i].album;
+    let artists = album.artists;
     artists.forEach((artist, index) => {
       if (index + 1 == artists.length) {
         artistStr += artist.name;
@@ -156,6 +157,7 @@ function getArtistStr() {
       }
     });
   }
+  console.log(artistStr);
   return artistStr;
 }
 
@@ -188,9 +190,16 @@ function getAlbumDiv(album, artistStr, i) {
   return divEl;
 }
 
-function openAlbum(divEl) {
-  let albumIndex = divEl.dataset.i;
-  console.log(i);
+function getTracklistDiv(album, artistStr, i) {
+  // img
+  // h1
+  // h3
+  // p
+  // div
+}
+
+function openAlbum(e) {
+  let albumIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items;
   let album = library[albumIndex].album;
   outputEl.innerHTML = "";
