@@ -14,7 +14,7 @@ let library = [];
 
 // Token
 let token =
-  "BQDc399G8PI44Ph935IY-KaVoDFJWULIN0zID9pkAUiai88NfGpqoYs0nj1zSiv-E6dJxhi8I3YLP71hW-UyAczc5iEZ9XED1KzPl2yPFax5jJQnjXSJ8uCCSggMuqxffoui8hCqgXui8z2p3ADYJGT2cSxsf8F_eeUSAQkjaAupZp8pxB9xGb9TZ1QAXnKzgPXIy4WbF_ZaWNzJ";
+  "BQBjMxjzXOoSbFcxXJqpLEfcoyAzksI0errRZwxNdPu_jY0NXTVh-D_DbgiR7u9PAFpZUX1CCJfcthUc75rXQ6DzvvBWh10EiZdSb9VhFX5tQPEkg4uIz1f7M_lj7MXGzkYTChfjxpjCF9ivZ6ClNo0o6j33qdV9doeTYQtNTC8v5e0uzC7m1xOYcFQBVBA_XUT0Gfekz5IiPXfR";
 let albumNum = 300;
 processData();
 
@@ -222,9 +222,11 @@ function openAlbum(e) {
     </div>
     `;
   for (let i = 0; i < trackItems.length; i++) {
+    let min = (trackItems[i].duration_ms / 60000).toFixed(0);
+    let sec = ((trackItems[i].duration_ms % 60000) / 1000).toFixed(0);
     albumOutputEl.innerHTML += `
     <p id="tracks" data-id="${i}">${trackItems[i].name}<span>${
-      trackItems[i].duration_ms / 60000
+      min + ":" + sec
     }</span><input type="checkbox" id="like-btn${i}" data-id="${i}"></p>
     `;
   }
