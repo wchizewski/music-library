@@ -14,7 +14,7 @@ let library = [];
 
 // Token
 let token =
-  "BQB1ntMstpM-P3UGzdtrE-5LByrWIHxWG0IvIj-B4rm67CDE1x_PSmf7tEnxNgJaYOEszGxzGMDU0gcHRjrQ18HPkXqu8pEdreQ0HUPmdvFaEY1k1OqiaHS8m9pNuuV-KNWSKi7M0UGOu31ey1FClz5bnNaO6xMJApqY3LSL4aXw61tFcareTkkZI7JMIjT2ylGdXuEDwM-LsbCU";
+  "BQDAcv_iuK5i4KHUlRvuSM62xdLIeC2OcDgwmnmToHT-QBD5ffd6EbvnDFlfMCWNKEjdH0_ji7lCQiHI6AONFhTwPfAIqvHO2Qd9xv1gxnuK2j55GA2u2NNdwVBH7n0sUForhWgsEV2_R8dfhf2t7Yl0-4stCOuNaFS8ZpMSkTavsAnUIat5lC7FDOmXcSX8jRE2yZI4y72ft-h_";
 let albumNum = 300;
 processData();
 
@@ -190,14 +190,6 @@ function getAlbumDiv(album, artistStr, i) {
   return divEl;
 }
 
-function getTracklistDiv(album, artistStr, i) {
-  // img
-  // h1
-  // h3
-  // p
-  // div
-}
-
 function openAlbum(e) {
   let albumIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items;
@@ -212,6 +204,7 @@ function openAlbum(e) {
       artistStr += artist.name + ", ";
     }
   });
+
   albumOutputEl.innerHTML = `
     <div>
       <p>
@@ -222,20 +215,75 @@ function openAlbum(e) {
     </div>
     `;
   for (let i = 0; i < trackItems.length; i++) {
-    let min = Math.floor((trackItems[i].duration_ms / 60000));
-    let sec = Math.round(((trackItems[i].duration_ms % 60000) / 1000));
+    let songArtists = trackItems[i].artists;
+    let songArtistsStr = "";
+    songArtists.forEach((songArtists, index) => {
+      if (index + 1 == songArtists.length) {
+        songArtistsStr += songArtists.name;
+      } else {
+        songArtistsStr += songArtists.name + ", ";
+      }
+    });
+    let min = Math.floor(trackItems[i].duration_ms / 60000);
+    let sec = Math.floor((trackItems[i].duration_ms % 60000) / 1000);
     if (sec.toString().length === 1) {
       sec = "0" + sec;
     }
+    let duration = min + ":" + sec;
+    // outputEl.appendChild(
+    //   getAlbumDiv(album, artistStr, i, songArtistsStr, trackItems, duration)
+    // );
     albumOutputEl.innerHTML += `
-    <p id="tracks" data-id="${i}">${trackItems[i].name}<span>${
-      min + ":" + sec
-    }</span><input type="checkbox" id="like-btn${i}" data-id="${i}"></p>
+    <p id="tracks" data-id="${i}">
+    ${trackItems[i].name}
+    <span>
+    ${duration}
+    </span>
+    <input type="checkbox" id="like-btn${i}" data-id="${i}">
+    <br>
+    ${songArtistsStr}
+    </p>
     `;
   }
-  for (let i = 0; i < trackItems.length; i++) {
-    document.getElementById(`like-btn${i}`).addEventListener("input", likeSong);
-  }
+  // for (let i = 0; i < trackItems.length; i++) {
+  //   document.getElementById(`like-btn${i}`).addEventListener("input", likeSong);
+  // }
+}
+
+function getTracklistDiv(
+  album,
+  artistStr,
+  i,
+  songArtistsStr,
+  trackItems,
+  duration
+) {
+  // img
+  let imgEl = document.createElement("img");
+  imgEl.src = album.images[1].url;
+
+  // h1
+  let h1El = document.createElement("h1");
+  h1El.innerHTML = album.name;
+
+  // h3
+  let h3El = document.createElement("h3");
+  h3El.innerHTML = artistStr + "•" + album.release_date;
+
+  // p (tracklist)
+  let tracklistEl = document.createElement("p");
+  tracklistEl.innerHTML = trackItems[i].name + duration + songArtistsStr;
+
+  // div
+  let divEl = document.createElement("div");
+  divEl.dataset.index = i;
+  divEl.addEventListener("click", openAlbum);
+  divEl.appendChild(imgEl);
+  divEl.appendChild(h1El);
+  divEl.appendChild(h3El);
+  divEl.appendChild(tracklistEl);
+
+  return divEl;
 }
 
 function likeSong(e) {
