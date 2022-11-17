@@ -14,7 +14,7 @@ let library = [];
 
 // Token
 let token =
-  "BQBjMxjzXOoSbFcxXJqpLEfcoyAzksI0errRZwxNdPu_jY0NXTVh-D_DbgiR7u9PAFpZUX1CCJfcthUc75rXQ6DzvvBWh10EiZdSb9VhFX5tQPEkg4uIz1f7M_lj7MXGzkYTChfjxpjCF9ivZ6ClNo0o6j33qdV9doeTYQtNTC8v5e0uzC7m1xOYcFQBVBA_XUT0Gfekz5IiPXfR";
+  "BQB1ntMstpM-P3UGzdtrE-5LByrWIHxWG0IvIj-B4rm67CDE1x_PSmf7tEnxNgJaYOEszGxzGMDU0gcHRjrQ18HPkXqu8pEdreQ0HUPmdvFaEY1k1OqiaHS8m9pNuuV-KNWSKi7M0UGOu31ey1FClz5bnNaO6xMJApqY3LSL4aXw61tFcareTkkZI7JMIjT2ylGdXuEDwM-LsbCU";
 let albumNum = 300;
 processData();
 
@@ -222,8 +222,11 @@ function openAlbum(e) {
     </div>
     `;
   for (let i = 0; i < trackItems.length; i++) {
-    let min = (trackItems[i].duration_ms / 60000).toFixed(0);
-    let sec = ((trackItems[i].duration_ms % 60000) / 1000).toFixed(0);
+    let min = Math.floor((trackItems[i].duration_ms / 60000));
+    let sec = Math.round(((trackItems[i].duration_ms % 60000) / 1000));
+    if (sec.toString().length === 1) {
+      sec = "0" + sec;
+    }
     albumOutputEl.innerHTML += `
     <p id="tracks" data-id="${i}">${trackItems[i].name}<span>${
       min + ":" + sec
