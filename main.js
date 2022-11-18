@@ -14,7 +14,7 @@ let library = [];
 
 // Token
 let token =
-  "BQDAcv_iuK5i4KHUlRvuSM62xdLIeC2OcDgwmnmToHT-QBD5ffd6EbvnDFlfMCWNKEjdH0_ji7lCQiHI6AONFhTwPfAIqvHO2Qd9xv1gxnuK2j55GA2u2NNdwVBH7n0sUForhWgsEV2_R8dfhf2t7Yl0-4stCOuNaFS8ZpMSkTavsAnUIat5lC7FDOmXcSX8jRE2yZI4y72ft-h_";
+  "BQCfI1g-bXru3vqQrHDJPER3XAyWpEnu0a0eGWLEG-QSWMzcsl56CeDoZGajziufRFzAMrzbVE18qV7ghb9JnXY6GLjgNhZsTedPzR5OaoJKQAPKQMuMB_b2wbkXA8pAbdG4001UOkQ6IuvLFYwBhINJatndE9SkuSzikaDpDXKXAfq2iAOcTXRP_NYfweXgvxC8qJpl2-smb9SQ";
 let albumNum = 300;
 processData();
 
@@ -273,6 +273,13 @@ function getTracklistDiv(
   // p (tracklist)
   let tracklistEl = document.createElement("p");
   tracklistEl.innerHTML = trackItems[i].name + duration + songArtistsStr;
+
+  // like btn
+  let checkboxEl = document.createElement("input");
+  checkboxEl.type = "checkbox";
+  checkboxEl.dataset.index = index;
+  checkboxEl.checked = task.completed;
+  checkboxEl.addEventListener("input", likeSong);
 
   // div
   let divEl = document.createElement("div");
