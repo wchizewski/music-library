@@ -14,7 +14,7 @@ let library = [];
 
 // Token
 let token =
-  "BQCfI1g-bXru3vqQrHDJPER3XAyWpEnu0a0eGWLEG-QSWMzcsl56CeDoZGajziufRFzAMrzbVE18qV7ghb9JnXY6GLjgNhZsTedPzR5OaoJKQAPKQMuMB_b2wbkXA8pAbdG4001UOkQ6IuvLFYwBhINJatndE9SkuSzikaDpDXKXAfq2iAOcTXRP_NYfweXgvxC8qJpl2-smb9SQ";
+  "BQBtFUsvq10CZCBzHZmgdUeBvuVDba004rF4DGCwTAQk1t3q5xMtrQqcKy4YecDUAOqbMkHM4Tlr1mgH8q4WTyD3ZYp1VGe7M0bbJAA5wlhU60H3HUhMDab9ffzP8H6y0S1kSN1TcmDUZ4uipJKT3iUSzWoKScXFVf42ISVt8kP0NQMwpruCLImEuTmevYDNUI6aMaVrVO6twN8l";
 let albumNum = 300;
 processData();
 
@@ -38,6 +38,29 @@ function processData() {
       });
   }
 }
+
+// // genres
+// let genres = [];
+// // Token
+// let token2 =
+//   "BQDkjEvB8unqtSs1JGjtDt9iYRBWeXfXxGJCTULxZPgGVMyZr9x5aL2xU7lCKsZ5uQ61sPvvYxCEb_i7dlLs9T3yq7li3DQpQ1K7E5VozvTETqU_Knwhi07QcifnYSnZAh3CfpfYe81FjWpv_KG8QdcUpKFx6_uVNyogu8nAk9BpVKmBQI7C5UzfuX-sUfy8-IONYMQ-F2ia60eR";
+// processData2();
+
+// function processData2() {
+//   let totalData = [];
+//   fetch(`https://api.spotify.com/v1/recommendations/available-genre-seeds`, {
+//     headers: new Headers({
+//       Authorization: `Bearer ${token2}`,
+//       ContentType: `application/json`,
+//     }),
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       totalData.push(data.items);
+//       let genre = totalData.flat();
+//       genres = genre;
+//     });
+// }
 
 // Sorting Albums
 document.getElementById("menu2-btn").addEventListener("click", goBtn2Handler);
@@ -95,22 +118,10 @@ function sortAlbumsArtist() {
 function displayAlbums() {
   outputEl.innerHTML = "";
   for (let i = 0; i < library.length; i++) {
-    let artists = library[i].album.artists;
-    let artistStr = "";
-    artists.forEach((artist, index) => {
-      if (index + 1 == artists.length) {
-        artistStr += artist.name;
-      } else {
-        artistStr += artist.name + ", ";
-      }
-    });
-    // let artistStr = getArtistStr();
     let album = library[i].album;
+    let artistStr = getArtistStr(album);
     outputEl.appendChild(getAlbumDiv(album, artistStr, i));
   }
-  // for (let i = 0; i < library.length; i++) {
-  //   document.getElementById(`album${i}`).addEventListener("click", openAlbum);
-  // }
 }
 
 // Search
@@ -122,16 +133,7 @@ function searchBarHandler(event) {
   let divStr;
   for (let i = 0; i < library.length; i++) {
     let album = library[i].album;
-    let artists = album.artists;
-    let artistStr = "";
-    artists.forEach((artist, index) => {
-      if (index + 1 == artists.length) {
-        artistStr += artist.name;
-      } else {
-        artistStr += artist.name + ", ";
-      }
-    });
-    // let artistStr = getArtistStr();
+    let artistStr = getArtistStr(album);
     if (
       library[i].album.name
         .toLowerCase()
@@ -144,20 +146,16 @@ function searchBarHandler(event) {
   }
 }
 
-function getArtistStr() {
+function getArtistStr(album) {
   let artistStr = "";
-  for (let i = 0; i < 3; i++) {
-    let album = library[i].album;
-    let artists = album.artists;
-    artists.forEach((artist, index) => {
-      if (index + 1 == artists.length) {
-        artistStr += artist.name;
-      } else {
-        artistStr += artist.name + ", ";
-      }
-    });
-  }
-  console.log(artistStr);
+  let artists = album.artists;
+  artists.forEach((artist, index) => {
+    if (index + 1 == artists.length) {
+      artistStr += artist.name;
+    } else {
+      artistStr += artist.name + ", ";
+    }
+  });
   return artistStr;
 }
 
