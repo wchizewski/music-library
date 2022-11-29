@@ -2,6 +2,7 @@
 
 // Elements
 let sortReverseBtn = document.getElementById("sort-reverse");
+let playlistBtn = document.getElementById("playlist");
 let menu1El = document.getElementById("menu1");
 let outputEl = document.getElementById("output");
 let albumOutputEl = document.getElementById("album-output");
@@ -13,7 +14,7 @@ let library = [];
 
 // Token
 let token =
-  "BQClBX3EG0-Lblsqxi2TN3ZglY0QsedFKspJJEnNAVYVXl_OKl5yK8TKNQPgSjB5rYbh_ckPjtBD79xhKrBuN5SdMYtgrIXmqeq4Dcyi7nyFzEBZwPpLYd5tFmudZHq9YmjYMm-tme17KkUB2RHm4LRRyKxc52wdFLbntgKI9aV9jpphRreo_A-Hioc0aY6Q3D0DpzzJZX52ftV6";
+  "BQCec3wFOLVl3nFtbH_8UwxA157ppjKQLgfekEmrPYoOMOuafttiSC0USLqrgEqSbMx-Zc1H0wwsym0r3xbWIl4GM633vQf3ZH54V05gdvKWseR9P6M4nf1VFVEu4sxFa6N_KuqAyZ-Evpa7ZmbzQEqfO9oR4pL7yZoWJ1nx5qgO4mM0LO1NTmLwZreBU1DBYIsUiO3jf98mvckC";
 let albumNum = 300;
 processData();
 
@@ -248,6 +249,7 @@ function openAlbum(e) {
   let trackItems = library[albumIndex].album.tracks.items;
   let album = library[albumIndex].album;
   outputEl.innerHTML = "";
+  outputEl.setAttribute("albumIndex", albumIndex);
   let artistStr = getArtistStr(album);
   albumOutputEl.appendChild(openAlbumDiv(album, artistStr));
   for (let i = 0; i < trackItems.length; i++) {
@@ -273,12 +275,31 @@ function openAlbum(e) {
   }
 }
 
+// Playlists
+playlistBtn.addEventListener("click", showLikedSongs);
+
+function showLikedSongs() {}
+
 function likeSong(e) {
   let trackIndex = +e.currentTarget.dataset.index;
-  let albumIndex = +e.target.dataset.index;
+  let albumIndex = outputEl.getAttribute("albumIndex");
   console.log(trackIndex);
+  console.log(albumIndex);
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
-  localStorage.setItem("track", JSON.stringify(trackItems));
-  console.log(trackItems);
+  localStorage.setItem("trackItems", JSON.stringify(trackItems));
+  // localStorage.setItem("trackItems", "hi");
+  // saveLikedSongs();
   console.log(localStorage);
+  console.log(trackItems);
 }
+
+// Local Storage
+// function saveLikedSongs() {
+//   localStorage.setItem("track", JSON.stringify(trackItems));
+//   console.log(localStorage);
+// }
+
+// function loadLikedSongs() {
+//   let likedSongsStr = localStorage.getItem("track");
+//   return JSON.parse(likedSongsStr) ?? [];
+// }
