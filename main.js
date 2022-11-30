@@ -11,10 +11,11 @@ let searchBarEl = document.getElementById("search-bar");
 
 // Array
 let library = [];
+let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQCec3wFOLVl3nFtbH_8UwxA157ppjKQLgfekEmrPYoOMOuafttiSC0USLqrgEqSbMx-Zc1H0wwsym0r3xbWIl4GM633vQf3ZH54V05gdvKWseR9P6M4nf1VFVEu4sxFa6N_KuqAyZ-Evpa7ZmbzQEqfO9oR4pL7yZoWJ1nx5qgO4mM0LO1NTmLwZreBU1DBYIsUiO3jf98mvckC";
+  "BQA_tU1Y0XK8fjslk-oO5s3zQTdFrsR5mG-GMKwtj9hSukTqGDMHAUUxgMFrAtd7bkYNybjGxfUOwsSmURfPfe9wX-XHF-nN84eXNYfVpfWAD0XCQxoeIvU3TXNbFWKKRw15GDVhmbJmJ_y8HL_5_RWJOgH_zvDk__h1kF7iuDo-3a8HbvsQNpAmxAJU8ARid0gI8Q1XVqWc7TH5";
 let albumNum = 300;
 processData();
 
@@ -299,7 +300,7 @@ function likeSong(e) {
 //   console.log(localStorage);
 // }
 
-// function loadLikedSongs() {
-//   let likedSongsStr = localStorage.getItem("track");
-//   return JSON.parse(likedSongsStr) ?? [];
-// }
+function loadLikedSongs() {
+  let likedSongsStr = localStorage.getItem("trackItems");
+  return JSON.parse(likedSongsStr) ?? [];
+}
