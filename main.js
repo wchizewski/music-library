@@ -6,6 +6,7 @@ let playlistBtn = document.getElementById("playlist");
 let menu1El = document.getElementById("menu1");
 let outputEl = document.getElementById("output");
 let albumOutputEl = document.getElementById("album-output");
+let playlists = document.getElementById("playlists");
 let searchMenuEl = document.getElementById("search-menu");
 let searchBarEl = document.getElementById("search-bar");
 
@@ -15,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQA_tU1Y0XK8fjslk-oO5s3zQTdFrsR5mG-GMKwtj9hSukTqGDMHAUUxgMFrAtd7bkYNybjGxfUOwsSmURfPfe9wX-XHF-nN84eXNYfVpfWAD0XCQxoeIvU3TXNbFWKKRw15GDVhmbJmJ_y8HL_5_RWJOgH_zvDk__h1kF7iuDo-3a8HbvsQNpAmxAJU8ARid0gI8Q1XVqWc7TH5";
+  "BQB5SK4ZAeDrONLNHmbLmP6S4SGeEbr58b52KiT8Ht0Xv-8CTFiueYkGLVXPmU060xgfKDTXf5xga3F-2M_71r533wwOVciHF3ZNjRTY-0_K0NRRja18Y2vlYyxVb-2vL3-twxfNWWy4TLRZBPgYmhqaGOh2z1hHRhesvJkmsujx0Ute6qNIhYdRbFs4c93A6iQ_grzDFcv2zx1j";
 let albumNum = 300;
 processData();
 
@@ -232,7 +233,7 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   let checkboxEl = document.createElement("input");
   checkboxEl.type = "checkbox";
   checkboxEl.dataset.index = i;
-  // checkboxEl.checked = trackItems.completed;
+  checkboxEl.checked = trackItems.completed;
   checkboxEl.addEventListener("input", likeSong);
 
   // div
@@ -279,26 +280,38 @@ function openAlbum(e) {
 // Playlists
 playlistBtn.addEventListener("click", showLikedSongs);
 
-function showLikedSongs() {}
+function showLikedSongs() {
+  outputEl.innerHTML = "";
+  albumOutputEl.innerHTML = "";
+  playlists.innerHTML = "Liked Songs:";
+  for (let i = 0; i < likedSongs.length; i++) {
+    playlists.innerHTML += likedSongs[i].name;
+  }
+}
+
+function getLikedSongsDiv(album) {
+  // h1
+  let h1El = document.createElement("h1");
+  h1El.innerHTML = "Liked Songs";
+
+  //
+}
 
 function likeSong(e) {
   let trackIndex = +e.currentTarget.dataset.index;
   let albumIndex = outputEl.getAttribute("albumIndex");
-  console.log(trackIndex);
-  console.log(albumIndex);
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
-  localStorage.setItem("trackItems", JSON.stringify(trackItems));
-  // localStorage.setItem("trackItems", "hi");
-  // saveLikedSongs();
-  console.log(localStorage);
-  console.log(trackItems);
+  trackItems.completed = !trackItems.completed;
+  // localStorage.setItem("trackItems", JSON.stringify(trackItems));
+  saveLikedSongs(trackItems);
 }
 
 // Local Storage
-// function saveLikedSongs() {
-//   localStorage.setItem("track", JSON.stringify(trackItems));
-//   console.log(localStorage);
-// }
+function saveLikedSongs(trackItems) {
+  likedSongs.push(trackItems);
+  localStorage.setItem("trackItems", JSON.stringify(likedSongs));
+  console.log(localStorage);
+}
 
 function loadLikedSongs() {
   let likedSongsStr = localStorage.getItem("trackItems");
