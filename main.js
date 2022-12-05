@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQB5SK4ZAeDrONLNHmbLmP6S4SGeEbr58b52KiT8Ht0Xv-8CTFiueYkGLVXPmU060xgfKDTXf5xga3F-2M_71r533wwOVciHF3ZNjRTY-0_K0NRRja18Y2vlYyxVb-2vL3-twxfNWWy4TLRZBPgYmhqaGOh2z1hHRhesvJkmsujx0Ute6qNIhYdRbFs4c93A6iQ_grzDFcv2zx1j";
+  "BQDq5ATGQblWWxIrKab20uagini_pMa_J0ArB3hO72VCbb3RSorwd61q4O9Kw5gJHdWIGw6eR04j-javq7Lf9ldq2Gm8btrcHi9L5BsM3zjL3hRtng4ohDgl-RSgFpZH1F5IN9DrjV69-jjHbdSJt9wEV8IKWtmQ-FSdA9OhBY3PXricoQ8VUs0SW5DMQOaCjQNcZjysEV9FzBuI";
 let albumNum = 300;
 processData();
 
@@ -59,6 +59,7 @@ function menuHandler() {
 
 function sortAlbumsAlphabetically() {
   albumOutputEl.innerHTML = "";
+  playlists.innerHTML = "";
   library.sort((a, b) => {
     return a.album.name.toLowerCase() > b.album.name.toLowerCase() ? 1 : -1;
   });
@@ -67,6 +68,8 @@ function sortAlbumsAlphabetically() {
 
 function sortAlbumsDate() {
   albumOutputEl.innerHTML = "";
+  playlists.innerHTML = "";
+
   library.sort((a, b) => {
     return a.album.release_date < b.album.release_date ? 1 : -1;
   });
@@ -75,6 +78,8 @@ function sortAlbumsDate() {
 
 function sortAlbumsArtist() {
   albumOutputEl.innerHTML = "";
+  playlists.innerHTML = "";
+
   library.sort((a, b) => {
     return a.album.artists[0].name.toLowerCase() >
       b.album.artists[0].name.toLowerCase()
@@ -88,18 +93,24 @@ function sortReverseBtnHandler() {
   let selection = menu1El.value;
   if (selection === "sort-alphabetically") {
     albumOutputEl.innerHTML = "";
+    playlists.innerHTML = "";
+
     library.sort((b, a) => {
       return a.album.name.toLowerCase() > b.album.name.toLowerCase() ? 1 : -1;
     });
     displayAlbums();
   } else if (selection === "sort-by-date") {
     albumOutputEl.innerHTML = "";
+    playlists.innerHTML = "";
+
     library.sort((b, a) => {
       return a.album.release_date < b.album.release_date ? 1 : -1;
     });
     displayAlbums();
   } else if (selection === "sort-by-artist") {
     albumOutputEl.innerHTML = "";
+    playlists.innerHTML = "";
+
     library.sort((b, a) => {
       return a.album.artists[0].name.toLowerCase() >
         b.album.artists[0].name.toLowerCase()
@@ -126,6 +137,7 @@ searchBarEl.addEventListener("keyup", searchBarHandler);
 function searchBarHandler() {
   albumOutputEl.innerHTML = "";
   outputEl.innerHTML = "";
+  playlists.innerHTML = "";
   let divStr;
   for (let i = 0; i < library.length; i++) {
     let album = library[i].album;
@@ -247,6 +259,7 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
 
 // Open Album
 function openAlbum(e) {
+  playlists.innerHTML = "";
   let albumIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items;
   let album = library[albumIndex].album;
@@ -283,9 +296,9 @@ playlistBtn.addEventListener("click", showLikedSongs);
 function showLikedSongs() {
   outputEl.innerHTML = "";
   albumOutputEl.innerHTML = "";
-  playlists.innerHTML = "Liked Songs:";
+  playlists.innerHTML = "Liked Songs:<br>";
   for (let i = 0; i < likedSongs.length; i++) {
-    playlists.innerHTML += likedSongs[i].name;
+    playlists.innerHTML += `${likedSongs[i].name}<br>`;
   }
 }
 
