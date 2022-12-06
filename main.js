@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQDq5ATGQblWWxIrKab20uagini_pMa_J0ArB3hO72VCbb3RSorwd61q4O9Kw5gJHdWIGw6eR04j-javq7Lf9ldq2Gm8btrcHi9L5BsM3zjL3hRtng4ohDgl-RSgFpZH1F5IN9DrjV69-jjHbdSJt9wEV8IKWtmQ-FSdA9OhBY3PXricoQ8VUs0SW5DMQOaCjQNcZjysEV9FzBuI";
+  "BQC_TeRfNyGAqHA5aFnRR3b2iW3RZAiHWohEUvkruF1yt2_-V3QKDWVNltJEWidxqPseGYxL7bhLMH6sV9HVHm_FH25q-CjfDrHN2-dyHFkZHYu0wxSF7qdvuqSdH32nuLcS0MnXJKcGMQzmm_OFX53FPn3b0xzT3i774ixJFEjf3QfVs3J0IUA2AJR07_NsVqKmK7VmuFT6rWgh";
 let albumNum = 300;
 processData();
 
@@ -293,37 +293,48 @@ function openAlbum(e) {
 // Playlists
 playlistBtn.addEventListener("click", showLikedSongs);
 
-function showLikedSongs() {
-  outputEl.innerHTML = "";
-  albumOutputEl.innerHTML = "";
-  playlists.innerHTML = "Liked Songs:<br>";
-  for (let i = 0; i < likedSongs.length; i++) {
-    playlists.innerHTML += `${likedSongs[i].name}<br>`;
-  }
-}
-
-function getLikedSongsDiv(album) {
+function getLikedSongsDiv(likedSongs) {
   // h1
   let h1El = document.createElement("h1");
   h1El.innerHTML = "Liked Songs";
 
-  //
+  // img
+  let imgEl = document.createElement("img");
+  imgEl.src = album.images[2].url;
+
+  // p
+  let pEl = document.createElement("p");
+  pEl.id = "tracks";
+  pEl.innerHTML = likedSongs;
 }
 
 function likeSong(e) {
   let trackIndex = +e.currentTarget.dataset.index;
   let albumIndex = outputEl.getAttribute("albumIndex");
+  let trackAlbumImg = library[albumIndex].album.images[2].url;
+  let trackAlbumName = library[albumIndex].album.name;
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
   trackItems.completed = !trackItems.completed;
-  // localStorage.setItem("trackItems", JSON.stringify(trackItems));
-  saveLikedSongs(trackItems);
+  // console.log(trackAlbumName);
+  // console.log(trackAlbumImg);
+  saveLikedSongs(trackAlbumName, trackAlbumImg, trackItems);
+}
+
+function showLikedSongs() {
+  outputEl.innerHTML = "";
+  albumOutputEl.innerHTML = "";
+  playlists.innerHTML = "Liked Songs:<br>";
+  for (let i = 0; i < likedSongs.length; i++) {
+    playlists.innerHTML += `<img src="${likedSongs[i].trackAlbumImg}">${likedSongs[i].name}<br>`;
+  }
 }
 
 // Local Storage
-function saveLikedSongs(trackItems) {
+function saveLikedSongs(trackAlbumName, trackAlbumImg, trackItems) {
+  trackItems.trackAlbumImg = trackAlbumImg;
+  trackItems.trackAlbumName = trackAlbumName;
   likedSongs.push(trackItems);
   localStorage.setItem("trackItems", JSON.stringify(likedSongs));
-  console.log(localStorage);
 }
 
 function loadLikedSongs() {
