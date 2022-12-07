@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQC_TeRfNyGAqHA5aFnRR3b2iW3RZAiHWohEUvkruF1yt2_-V3QKDWVNltJEWidxqPseGYxL7bhLMH6sV9HVHm_FH25q-CjfDrHN2-dyHFkZHYu0wxSF7qdvuqSdH32nuLcS0MnXJKcGMQzmm_OFX53FPn3b0xzT3i774ixJFEjf3QfVs3J0IUA2AJR07_NsVqKmK7VmuFT6rWgh";
+  "BQC9bt0JBaSp_q2yibd9qoFmMfazZW89z52ZGSp2CUGG5MUfGVZgM9v3WmDTFCAUHYhZGDdPW2Gz_LBQU1GdZX9x9G0w55Ic9Uy2VITGYaAajPlIUsYyfuzWIAWbBiN3gOt4WXZQfsk4-1cXVpv1hMz83XECnjIvHzFa4VzY9vPpcGRA2hP3PRQkBuchBecGGIUOeR921OSpbDI0";
 let albumNum = 300;
 processData();
 
@@ -257,6 +257,16 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   return divEl;
 }
 
+function getDuration(duration_ms) {
+  let min = Math.floor(duration_ms / 60000);
+  let sec = Math.floor((duration_ms % 60000) / 1000);
+  if (sec.toString().length === 1) {
+    sec = "0" + sec;
+  }
+  let duration = min + ":" + sec;
+  return duration;
+}
+
 // Open Album
 function openAlbum(e) {
   playlists.innerHTML = "";
@@ -278,14 +288,9 @@ function openAlbum(e) {
       }
     });
     // let songArtistsStr = getSongArtistsStr(trackItems);
-    let min = Math.floor(trackItems[i].duration_ms / 60000);
-    let sec = Math.floor((trackItems[i].duration_ms % 60000) / 1000);
-    if (sec.toString().length === 1) {
-      sec = "0" + sec;
-    }
-    let duration = min + ":" + sec;
+    let duration_ms = trackItems[i].duration_ms;
     albumOutputEl.appendChild(
-      getTracklistDiv(i, songArtistsStr, trackItems, duration)
+      getTracklistDiv(i, songArtistsStr, trackItems, getDuration(duration_ms))
     );
   }
 }
@@ -293,19 +298,24 @@ function openAlbum(e) {
 // Playlists
 playlistBtn.addEventListener("click", showLikedSongs);
 
-function getLikedSongsDiv(likedSongs) {
-  // h1
-  let h1El = document.createElement("h1");
-  h1El.innerHTML = "Liked Songs";
-
+function getLikedSongsDiv(i) {
   // img
+  console.log(i);
   let imgEl = document.createElement("img");
-  imgEl.src = album.images[2].url;
+  imgEl.src = likedSongs[i].trackAlbumImg;
 
   // p
   let pEl = document.createElement("p");
   pEl.id = "tracks";
-  pEl.innerHTML = likedSongs;
+  pEl.innerHTML = likedSongs[i].name + likedSongs[i].trackAlbumName + "<br>";
+  pEl.appendChild(imgEl);
+
+  // divEl
+  let divEl = document.createElement("div");
+  divEl.dataset.index = i;
+  divEl.appendChild(pEl);
+
+  return divEl;
 }
 
 function likeSong(e) {
@@ -315,8 +325,6 @@ function likeSong(e) {
   let trackAlbumName = library[albumIndex].album.name;
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
   trackItems.completed = !trackItems.completed;
-  // console.log(trackAlbumName);
-  // console.log(trackAlbumImg);
   saveLikedSongs(trackAlbumName, trackAlbumImg, trackItems);
 }
 
@@ -324,8 +332,8 @@ function showLikedSongs() {
   outputEl.innerHTML = "";
   albumOutputEl.innerHTML = "";
   playlists.innerHTML = "Liked Songs:<br>";
-  for (let i = 0; i < likedSongs.length; i++) {
-    playlists.innerHTML += `<img src="${likedSongs[i].trackAlbumImg}">${likedSongs[i].name}<br>`;
+  for (let i = 0; i < library.length; i++) {
+    outputEl.appendChild(getLikedSongsDiv(i));
   }
 }
 
