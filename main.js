@@ -6,7 +6,7 @@ let playlistBtn = document.getElementById("playlist");
 let menu1El = document.getElementById("menu1");
 let outputEl = document.getElementById("output");
 let albumOutputEl = document.getElementById("album-output");
-let playlists = document.getElementById("playlists");
+let playlistsOutputEl = document.getElementById("playlists");
 let searchMenuEl = document.getElementById("search-menu");
 let searchBarEl = document.getElementById("search-bar");
 
@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQC9bt0JBaSp_q2yibd9qoFmMfazZW89z52ZGSp2CUGG5MUfGVZgM9v3WmDTFCAUHYhZGDdPW2Gz_LBQU1GdZX9x9G0w55Ic9Uy2VITGYaAajPlIUsYyfuzWIAWbBiN3gOt4WXZQfsk4-1cXVpv1hMz83XECnjIvHzFa4VzY9vPpcGRA2hP3PRQkBuchBecGGIUOeR921OSpbDI0";
+  "BQAUXrS1m11kfT8rOHUhoNW474M-BY74HTsQNsOTT4UwHD4GDWoentYmgj0Si8iiXPGVScfCRQrpirAsqSSRaXIVwq_g8Dj-dKcaLBoHdZ1B1rgqq9y4QLukLrEqkbiTPHGNNMI8uLP6ALOdIaW62xrFW-pY9vJrJ4vkcLmBWdjaRzGUSvuZzJL6zDh9f8QBPjVDzxQTQzvF0L7z";
 let albumNum = 300;
 processData();
 
@@ -59,7 +59,7 @@ function menuHandler() {
 
 function sortAlbumsAlphabetically() {
   albumOutputEl.innerHTML = "";
-  playlists.innerHTML = "";
+  playlistsOutputEl.innerHTML = "";
   library.sort((a, b) => {
     return a.album.name.toLowerCase() > b.album.name.toLowerCase() ? 1 : -1;
   });
@@ -68,7 +68,7 @@ function sortAlbumsAlphabetically() {
 
 function sortAlbumsDate() {
   albumOutputEl.innerHTML = "";
-  playlists.innerHTML = "";
+  playlistsOutputEl.innerHTML = "";
 
   library.sort((a, b) => {
     return a.album.release_date < b.album.release_date ? 1 : -1;
@@ -78,7 +78,7 @@ function sortAlbumsDate() {
 
 function sortAlbumsArtist() {
   albumOutputEl.innerHTML = "";
-  playlists.innerHTML = "";
+  playlistsOutputEl.innerHTML = "";
 
   library.sort((a, b) => {
     return a.album.artists[0].name.toLowerCase() >
@@ -93,7 +93,7 @@ function sortReverseBtnHandler() {
   let selection = menu1El.value;
   if (selection === "sort-alphabetically") {
     albumOutputEl.innerHTML = "";
-    playlists.innerHTML = "";
+    playlistsOutputEl.innerHTML = "";
 
     library.sort((b, a) => {
       return a.album.name.toLowerCase() > b.album.name.toLowerCase() ? 1 : -1;
@@ -101,7 +101,7 @@ function sortReverseBtnHandler() {
     displayAlbums();
   } else if (selection === "sort-by-date") {
     albumOutputEl.innerHTML = "";
-    playlists.innerHTML = "";
+    playlistsOutputEl.innerHTML = "";
 
     library.sort((b, a) => {
       return a.album.release_date < b.album.release_date ? 1 : -1;
@@ -109,7 +109,7 @@ function sortReverseBtnHandler() {
     displayAlbums();
   } else if (selection === "sort-by-artist") {
     albumOutputEl.innerHTML = "";
-    playlists.innerHTML = "";
+    playlistsOutputEl.innerHTML = "";
 
     library.sort((b, a) => {
       return a.album.artists[0].name.toLowerCase() >
@@ -137,7 +137,7 @@ searchBarEl.addEventListener("keyup", searchBarHandler);
 function searchBarHandler() {
   albumOutputEl.innerHTML = "";
   outputEl.innerHTML = "";
-  playlists.innerHTML = "";
+  playlistsOutputEl.innerHTML = "";
   let divStr;
   for (let i = 0; i < library.length; i++) {
     let album = library[i].album;
@@ -168,19 +168,6 @@ function getArtistStr(album) {
   return artistStr;
 }
 
-function getSongArtistsStr(trackItems) {
-  let songArtists = trackItems.artists;
-  let songArtistsStr = "";
-  songArtists.forEach((songArtists, index) => {
-    if (index + 1 == songArtists.length) {
-      songArtistsStr += songArtists.name;
-    } else {
-      songArtistsStr += songArtists.name + ", ";
-    }
-  });
-  return songArtistsStr;
-}
-
 // Get Div
 function getAlbumDiv(album, artistStr, i) {
   // img
@@ -202,6 +189,7 @@ function getAlbumDiv(album, artistStr, i) {
   // div
   let divEl = document.createElement("div");
   divEl.dataset.index = i;
+  divEl.className = "albumDiv";
   divEl.addEventListener("click", openAlbum);
   divEl.appendChild(imgEl);
   divEl.appendChild(h2El);
@@ -237,7 +225,7 @@ function openAlbumDiv(album, artistStr) {
 function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   // p (tracklistEl)
   let tracklistEl = document.createElement("p");
-  tracklistEl.id = "tracks";
+  tracklistEl.className = "tracks";
   tracklistEl.innerHTML =
     trackItems[i].name + " " + duration + "<br>" + songArtistsStr;
 
@@ -267,9 +255,22 @@ function getDuration(duration_ms) {
   return duration;
 }
 
+function getSongArtistsStr(trackItems) {
+  let songArtists = trackItems.artists;
+  let songArtistsStr = "";
+  songArtists.forEach((songArtists, index) => {
+    if (index + 1 == songArtists.length) {
+      songArtistsStr += songArtists.name;
+    } else {
+      songArtistsStr += songArtists.name + ", ";
+    }
+  });
+  return songArtistsStr;
+}
+
 // Open Album
 function openAlbum(e) {
-  playlists.innerHTML = "";
+  playlistsOutputEl.innerHTML = "";
   let albumIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items;
   let album = library[albumIndex].album;
@@ -298,16 +299,19 @@ function openAlbum(e) {
 // Playlists
 playlistBtn.addEventListener("click", showLikedSongs);
 
-function getLikedSongsDiv(i) {
+function getLikedSongsDiv(i, albumIndex) {
   // img
-  console.log(i);
+  console.log(likedSongs[i]);
   let imgEl = document.createElement("img");
   imgEl.src = likedSongs[i].trackAlbumImg;
+  imgEl.dataset.index = albumIndex;
+  imgEl.addEventListener("click", openAlbum);
 
   // p
   let pEl = document.createElement("p");
-  pEl.id = "tracks";
-  pEl.innerHTML = likedSongs[i].name + likedSongs[i].trackAlbumName + "<br>";
+  pEl.className = "likedSongs";
+  pEl.innerHTML =
+    likedSongs[i].name + " by " + " • " + likedSongs[i].trackAlbumName + "<br>";
   pEl.appendChild(imgEl);
 
   // divEl
@@ -331,9 +335,11 @@ function likeSong(e) {
 function showLikedSongs() {
   outputEl.innerHTML = "";
   albumOutputEl.innerHTML = "";
-  playlists.innerHTML = "Liked Songs:<br>";
+  let albumIndex = outputEl.getAttribute("albumIndex");
+  console.log(albumIndex);
+  playlistsOutputEl.innerHTML = "Liked Songs:<br>";
   for (let i = 0; i < library.length; i++) {
-    outputEl.appendChild(getLikedSongsDiv(i));
+    playlistsOutputEl.appendChild(getLikedSongsDiv(i, albumIndex));
   }
 }
 
