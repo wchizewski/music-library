@@ -22,7 +22,7 @@ h2 {
   display: inline-block;
 }
 
-.tracks {
+.albumTracks {
   font-weight: bold;
   border: 0.5px solid black;
   margin: 0%;
@@ -31,7 +31,7 @@ h2 {
   padding-left: 10px;
 }
 
-.likedSongs {
+.songs {
   font-weight: bold;
   border: 0.5px solid black;
   margin: 0%;

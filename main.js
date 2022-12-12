@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQAfI-XzK2aZOgcMdQUp7NqQfi5JQtKfRARP5ZM06Xbpor1qIiHDvpYAXMC6oBYKFJJDpXYhKrRrnqRHopK8s8gFddOG-Ip-M5hv7T3Xy_EzfdAH1FboPHSGxXs26W8ugpdWaFWTciQG075MFYbRR9-a3yceNABTbcljgcIX6VCJ404ifUCOg6_GXD9UMHW1rWawD8t8Mm4ANBC6";
+  "BQA3dA7ldL0MjEl_T05GwO_H75cc0ieBgDXdQljWRWrXQf7UoOb7NBmH4cBazLHYwPgLI-LWGdErWms9o-sCgpmP5VlBNAcc62xda3dD-ZU0xft-WYhz5ILVSujnsOI_QGSpfmY-OFljV3pfGXgXjB07vV51R5MHlasoYGSm_I63XFmT80EfS_2oiqhymTva68KUkICHyTpghWKq";
 let albumNum = 5000;
 processData();
 
@@ -135,23 +135,65 @@ function displayAlbums() {
 searchBarEl.addEventListener("keyup", searchBarHandler);
 
 function searchBarHandler() {
-  albumOutputEl.innerHTML = "";
-  outputEl.innerHTML = "";
-  playlistsOutputEl.innerHTML = "";
-  let divStr;
-  for (let i = 0; i < library.length; i++) {
-    let album = library[i].album;
-    let artistStr = getArtistStr(album);
-    if (
-      library[i].album.name
-        .toLowerCase()
-        .includes(searchBarEl.value.toLowerCase()) ||
-      artistStr.toLowerCase().includes(searchBarEl.value.toLowerCase())
-    ) {
-      divStr = getAlbumDiv(album, artistStr, i);
-      outputEl.appendChild(divStr);
+  let selection = searchMenuEl.value;
+  if ((selection.value = "album")) {
+    albumOutputEl.innerHTML = "";
+    outputEl.innerHTML = "";
+    playlistsOutputEl.innerHTML = "";
+    let divStr;
+    for (let i = 0; i < library.length; i++) {
+      let album = library[i].album;
+      let artistStr = getArtistStr(album);
+      if (
+        album.name.toLowerCase().includes(searchBarEl.value.toLowerCase()) ||
+        artistStr.toLowerCase().includes(searchBarEl.value.toLowerCase())
+      ) {
+        divStr = getAlbumDiv(album, artistStr, i);
+        outputEl.appendChild(divStr);
+      }
     }
+    // } else if ((selection.value = "song")) {
+    //   albumOutputEl.innerHTML = "";
+    //   outputEl.innerHTML = "";
+    //   playlistsOutputEl.innerHTML = "";
+    //   let divStr;
+    //   for (let i = 0; i < library.length; i++) {
+    //     let track = library[i].album.tracks.items;
+    //     // let artistStr = getArtistStr(album);
+    //     if (
+    //       track.name.toLowerCase().includes(searchBarEl.value.toLowerCase())
+    //       //   ||
+    //       // artistStr.toLowerCase().includes(searchBarEl.value.toLowerCase())
+    //     ) {
+    //       console.log("hi");
+    //       divStr = songSearchDiv(i);
+    //       outputEl.appendChild(divStr);
+    //     }
+    //   }
+    // }
   }
+}
+
+function songSearchDiv(i) {
+  // img
+  let imgEl = document.createElement("img");
+  imgEl.src = likedSongs[i].trackAlbumImg;
+  imgEl.dataset.index = likedSongs[i].albumIndex;
+  imgEl.addEventListener("click", openAlbum);
+
+  // p
+  let pEl = document.createElement("p");
+  pEl.className = "songs";
+  pEl.innerHTML =
+    likedSongs[i].name + " by " + " • " + likedSongs[i].trackAlbumName + "<br>";
+  pEl.appendChild(imgEl);
+
+  // divEl
+  let divEl = document.createElement("div");
+  divEl.dataset.index = i;
+  divEl.appendChild(pEl);
+
+  return divEl;
 }
 
 // Helper Functions for Artists
@@ -225,7 +267,7 @@ function openAlbumDiv(album, artistStr) {
 function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   // p (tracklistEl)
   let tracklistEl = document.createElement("p");
-  tracklistEl.className = "tracks";
+  tracklistEl.className = "albumTracks";
   tracklistEl.innerHTML =
     trackItems[i].name + " • " + duration + "<br>" + songArtistsStr;
 
@@ -308,9 +350,13 @@ function getLikedSongsDiv(i) {
 
   // p
   let pEl = document.createElement("p");
-  pEl.className = "likedSongs";
+  pEl.className = "songs";
   pEl.innerHTML =
-    likedSongs[i].name + " by " + " • " + likedSongs[i].trackAlbumName + "<br>";
+    likedSongs[i].name +
+    " by " +
+    "[artist(s)] • " +
+    likedSongs[i].trackAlbumName +
+    "<br>";
   pEl.appendChild(imgEl);
 
   // divEl
