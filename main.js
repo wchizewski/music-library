@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQA3dA7ldL0MjEl_T05GwO_H75cc0ieBgDXdQljWRWrXQf7UoOb7NBmH4cBazLHYwPgLI-LWGdErWms9o-sCgpmP5VlBNAcc62xda3dD-ZU0xft-WYhz5ILVSujnsOI_QGSpfmY-OFljV3pfGXgXjB07vV51R5MHlasoYGSm_I63XFmT80EfS_2oiqhymTva68KUkICHyTpghWKq";
+  "BQCZOIOSSdExuBm1ArW_056AYG14G_VcRgt_61cCihUZtsrF0TLe56JguRItgqZD9AcAmGtw8mrc2SxNpwu5kUan_B6MRwGlUj-jveSdxeLiq_hQlyO8itNodF4yd2tQS6q9FjkWObjiZu_Uw8RfrQFsWItDnm1xnDc3OGuqRYCHjU3xVT3GBqhyJRYvUO4gCSwKcb_VdHS6EKRg";
 let albumNum = 5000;
 processData();
 
@@ -275,7 +275,15 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   let checkboxEl = document.createElement("input");
   checkboxEl.type = "checkbox";
   checkboxEl.dataset.index = i;
-  checkboxEl.checked = trackItems.completed;
+  // let checked;
+  // if (checkboxEl.checked) {
+  //   checkboxEl.checked = true;
+  //   console.log(checkboxEl.checked);
+  // } else if (checkboxEl.checked === false) {
+  //   checkboxEl.checked = false;
+  //   console.log(checkboxEl.checked);
+  // }
+  console.log(checkboxEl.checked);
   checkboxEl.addEventListener("input", likeSong);
 
   // div
@@ -312,6 +320,7 @@ function getSongArtistsStr(trackItems) {
 
 // Open Album
 function openAlbum(e) {
+  // sortAlbumsAlphabetically();
   playlistsOutputEl.innerHTML = "";
   let albumIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items;
@@ -367,14 +376,19 @@ function getLikedSongsDiv(i) {
   return divEl;
 }
 
-function likeSong(e) {
+function likeSong(e, checked) {
   let trackIndex = +e.currentTarget.dataset.index;
   let albumIndex = outputEl.getAttribute("albumIndex");
   let trackAlbumImg = library[albumIndex].album.images[2].url;
   let trackAlbumName = library[albumIndex].album.name;
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
-  trackItems.completed = !trackItems.completed;
-  saveLikedSongs(albumIndex, trackAlbumName, trackAlbumImg, trackItems);
+  saveLikedSongs(
+    checked,
+    albumIndex,
+    trackAlbumName,
+    trackAlbumImg,
+    trackItems
+  );
 }
 
 function showLikedSongs() {
@@ -387,10 +401,18 @@ function showLikedSongs() {
 }
 
 // Local Storage
-function saveLikedSongs(albumIndex, trackAlbumName, trackAlbumImg, trackItems) {
+function saveLikedSongs(
+  checked,
+  albumIndex,
+  trackAlbumName,
+  trackAlbumImg,
+  trackItems
+) {
+  trackItems.checked = checked;
   trackItems.trackAlbumImg = trackAlbumImg;
   trackItems.trackAlbumName = trackAlbumName;
   trackItems.albumIndex = albumIndex;
+  // if
   likedSongs.push(trackItems);
   localStorage.setItem("trackItems", JSON.stringify(likedSongs));
 }
