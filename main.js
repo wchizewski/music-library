@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQCZOIOSSdExuBm1ArW_056AYG14G_VcRgt_61cCihUZtsrF0TLe56JguRItgqZD9AcAmGtw8mrc2SxNpwu5kUan_B6MRwGlUj-jveSdxeLiq_hQlyO8itNodF4yd2tQS6q9FjkWObjiZu_Uw8RfrQFsWItDnm1xnDc3OGuqRYCHjU3xVT3GBqhyJRYvUO4gCSwKcb_VdHS6EKRg";
+  "BQBl6yBkSLBVxoDw3W7sg6zQLtJ2lqU2wjE1gRLdj4Zk86nLlJlVhgoPswSNi2aI-MFzatwx5VahpFFrcRcxfAe53gySmhv0EENNW2ZhcptW7hbREU8iXuOirg4_xzhGT8jWP7ASkFJzTIosd5MFL6fMU9NoALqI5FSl9F6c9R9ErinBfWyD5IcT4NQSFqQWaRV7uYrDPxS6lVap";
 let albumNum = 5000;
 processData();
 
@@ -283,7 +283,7 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   //   checkboxEl.checked = false;
   //   console.log(checkboxEl.checked);
   // }
-  console.log(checkboxEl.checked);
+  checkboxEl.checked = trackItems.liked;
   checkboxEl.addEventListener("input", likeSong);
 
   // div
@@ -402,16 +402,18 @@ function showLikedSongs() {
 
 // Local Storage
 function saveLikedSongs(
-  checked,
+  // checked,
   albumIndex,
   trackAlbumName,
   trackAlbumImg,
   trackItems
 ) {
-  trackItems.checked = checked;
+  // trackItems.checked = checked;
   trackItems.trackAlbumImg = trackAlbumImg;
   trackItems.trackAlbumName = trackAlbumName;
   trackItems.albumIndex = albumIndex;
+  trackItems.liked = !trackItems.liked;
+
   // if
   likedSongs.push(trackItems);
   localStorage.setItem("trackItems", JSON.stringify(likedSongs));
