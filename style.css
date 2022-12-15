@@ -40,6 +40,6 @@ h2 {
   padding-left: 10px;
 }
 
-/* checkbox {
-  padding-left: 65%;
-} */
+input[type="checkbox"] {
+  float: right;
+}
