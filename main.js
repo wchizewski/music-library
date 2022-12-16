@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQDaxDjK47AK3dJaydtQ0F6bRqlDeBGndIQRgUULdAfSTumglbfwhibxUDHGiLsanc4zKeAa51ACRpe9bHgvyWhLYXvbpGFptvdEhsKynWmNiFdKMqPM8nsO9W1zoY4HK-IY9qILr54DC_V1_4nQSSpHHNS5f6QRIh2xEzzXhAZjePa7Dq0CKFxPhqFpC2nli_8C7ZGJAkR1TmcW";
+  "BQABBGE1ClqIMWZzuZVTsPZ7F33J_h7lR2BHGK7ygxPASWC8MURTJYwJdQIJyCA3Yd_IDdu-WvpNyUXIj4HFutSbC5GFvJGvPrzxf46EXCiXPZAQNen-FiGAF_plPNpdhvBIT1fTNdEmbt46oQMnmNfjSkSgMNu1ivjrPfh-u-zPIGdj-b38G_vH3Hka1EX-7zOhKz4rAqhHhnfk";
 let albumNum = 5000;
 processData();
 
@@ -264,7 +264,7 @@ function openAlbumDiv(album, artistStr) {
 }
 
 // Open Album Function: Tracklist + Like Btn
-function getTracklistDiv(n, i, songArtistsStr, trackItems, duration) {
+function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   // p (tracklistEl)
   let tracklistEl = document.createElement("p");
   tracklistEl.className = "albumTracks";
@@ -275,7 +275,7 @@ function getTracklistDiv(n, i, songArtistsStr, trackItems, duration) {
   let checkboxEl = document.createElement("input");
   checkboxEl.type = "checkbox";
   checkboxEl.dataset.index = i;
-  if (likedSongs[n].liked) {
+  if (likedSongs[i].liked == true) {
     checkboxEl.checked = true;
     console.log(checkboxEl.checked);
   }
@@ -334,12 +334,12 @@ function openAlbum(e) {
         songArtistsStr += songArtists.name + ", ";
       }
     });
-    for (let n; n < likedSongs.length; n++) {}
+    // for (let n; n < likedSongs.length; n++) {}
     // let songArtistsStr = getSongArtistsStr(trackItems);
     let duration_ms = trackItems[i].duration_ms;
     albumOutputEl.appendChild(
       getTracklistDiv(
-        n,
+        // n,
         i,
         songArtistsStr,
         trackItems,
