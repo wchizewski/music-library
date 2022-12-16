@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQABBGE1ClqIMWZzuZVTsPZ7F33J_h7lR2BHGK7ygxPASWC8MURTJYwJdQIJyCA3Yd_IDdu-WvpNyUXIj4HFutSbC5GFvJGvPrzxf46EXCiXPZAQNen-FiGAF_plPNpdhvBIT1fTNdEmbt46oQMnmNfjSkSgMNu1ivjrPfh-u-zPIGdj-b38G_vH3Hka1EX-7zOhKz4rAqhHhnfk";
+  "BQC5nKVKgPjRMgE1HMQH2DC_Rl6BB0hqYHvWa-IvE-cDtK44-_EwRiU-VLZDMiJvt9T95-sweyNpvEuXtYgcoWkOEXXtMrcx8kNyMFCxWM-17voGSNTsBZh2vyxC3mkk37mqVag6xRr1c6RALb8qvg_FednY5ksFllztyaotLIkMlF4QMVKpb7I_D5VgXaGO-_mTwoO5ObONnY4q";
 let albumNum = 5000;
 processData();
 
@@ -275,10 +275,10 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   let checkboxEl = document.createElement("input");
   checkboxEl.type = "checkbox";
   checkboxEl.dataset.index = i;
-  if (likedSongs[i].liked == true) {
-    checkboxEl.checked = true;
-    console.log(checkboxEl.checked);
-  }
+  // if (likedSongs[i].liked == true) {
+  //   checkboxEl.checked = true;
+  //   console.log(checkboxEl.checked);
+  // }
   checkboxEl.addEventListener("input", likeSong);
 
   // div
