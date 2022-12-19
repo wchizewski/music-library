@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQC5nKVKgPjRMgE1HMQH2DC_Rl6BB0hqYHvWa-IvE-cDtK44-_EwRiU-VLZDMiJvt9T95-sweyNpvEuXtYgcoWkOEXXtMrcx8kNyMFCxWM-17voGSNTsBZh2vyxC3mkk37mqVag6xRr1c6RALb8qvg_FednY5ksFllztyaotLIkMlF4QMVKpb7I_D5VgXaGO-_mTwoO5ObONnY4q";
+  "BQBPDjSzHyDGkrR8r_PXMWKM7e2FcW8QT2Vto7RR91210tPOtlfDkuQsRC0kRwizds6dBlyHelwwkKsKhiK-IQWGNmft-Ioa3Xh9ttSh7IEu0clayaJf0pNUz6ft20TAix09E0sN8Tq8p4hSSOUEQepNYur1hts6ynNxFNtKMEiylqwcCCwldMUSOg-JXXERnL6-MYeUcRG5afkW";
 let albumNum = 5000;
 processData();
 
@@ -275,10 +275,12 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   let checkboxEl = document.createElement("input");
   checkboxEl.type = "checkbox";
   checkboxEl.dataset.index = i;
-  // if (likedSongs[i].liked == true) {
-  //   checkboxEl.checked = true;
-  //   console.log(checkboxEl.checked);
-  // }
+  for (let n = 0; n < likedSongs.length; n++) {
+    if (likedSongs[n].liked == true) {
+      checkboxEl.checked = true;
+      console.log(likedSongs[n].liked);
+    }
+  }
   checkboxEl.addEventListener("input", likeSong);
 
   // div
@@ -378,17 +380,14 @@ function getLikedSongsDiv(i) {
   return divEl;
 }
 
-function likeSong(
-  e
-  // , checked
-) {
+function likeSong(e, checked) {
   let trackIndex = +e.currentTarget.dataset.index;
   let albumIndex = outputEl.getAttribute("albumIndex");
   let trackAlbumImg = library[albumIndex].album.images[2].url;
   let trackAlbumName = library[albumIndex].album.name;
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
   saveLikedSongs(
-    // checked,
+    checked,
     albumIndex,
     trackAlbumName,
     trackAlbumImg,
@@ -407,13 +406,13 @@ function showLikedSongs() {
 
 // Local Storage
 function saveLikedSongs(
-  // checked,
+  checked,
   albumIndex,
   trackAlbumName,
   trackAlbumImg,
   trackItems
 ) {
-  // trackItems.checked = checked;
+  trackItems.checked = checked;
   trackItems.trackAlbumImg = trackAlbumImg;
   trackItems.trackAlbumName = trackAlbumName;
   trackItems.albumIndex = albumIndex;
