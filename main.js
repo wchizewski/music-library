@@ -9,6 +9,7 @@ let albumOutputEl = document.getElementById("album-output");
 let playlistsOutputEl = document.getElementById("playlists");
 let searchMenuEl = document.getElementById("search-menu");
 let searchBarEl = document.getElementById("search-bar");
+let selection = menu1El.value;
 
 // Array
 let library = [];
@@ -16,7 +17,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQBPDjSzHyDGkrR8r_PXMWKM7e2FcW8QT2Vto7RR91210tPOtlfDkuQsRC0kRwizds6dBlyHelwwkKsKhiK-IQWGNmft-Ioa3Xh9ttSh7IEu0clayaJf0pNUz6ft20TAix09E0sN8Tq8p4hSSOUEQepNYur1hts6ynNxFNtKMEiylqwcCCwldMUSOg-JXXERnL6-MYeUcRG5afkW";
+  "BQCaSLCzC_3h3pDEWVItuZmTexH-y8g2OYIkjbZ_uJJSJ8oVQKXFBN3sThfVNAFSfTyFWONxx7tGGOPTdnSksynit-SpcDEMoVlMqxW25nmLxjasPaQ1Yx7kR4Dlhy4N6fdOvfwNXaDpwOwEwAUNrQbmnijNdfWPqcz39vvf-gV-Zo6aSH2NB4LiWO1knQOMi01n8rwzvQo34ytV";
 let albumNum = 5000;
 processData();
 
@@ -47,7 +48,6 @@ sortReverseBtn.addEventListener("click", sortReverseBtnHandler);
 
 function menuHandler() {
   // Get Menu Selection
-  let selection = menu1El.value;
   if (selection === "sort-alphabetically") {
     sortAlbumsAlphabetically();
   } else if (selection === "sort-by-date") {
@@ -265,6 +265,7 @@ function openAlbumDiv(album, artistStr) {
 
 // Open Album Function: Tracklist + Like Btn
 function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
+  console.log(trackItems[i]);
   // p (tracklistEl)
   let tracklistEl = document.createElement("p");
   tracklistEl.className = "albumTracks";
@@ -276,11 +277,19 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   checkboxEl.type = "checkbox";
   checkboxEl.dataset.index = i;
   for (let n = 0; n < likedSongs.length; n++) {
-    if (likedSongs[n].liked == true) {
+    if (
+      likedSongs[n].name === trackItems[i].name &&
+      likedSongs[n].duration_ms === trackItems[i].duration_ms
+    ) {
       checkboxEl.checked = true;
-      console.log(likedSongs[n].liked);
     }
   }
+
+  // if (checkboxEl.checked === false) {
+  //   likedSongs.pop(trackItems[i]);
+  //   console.log(trackItems.pop(trackItems[i]));
+  // }
+
   checkboxEl.addEventListener("input", likeSong);
 
   // div
@@ -317,7 +326,13 @@ function getSongArtistsStr(trackItems) {
 
 // Open Album
 function openAlbum(e) {
-  // sortAlbumsAlphabetically();
+  // if (selection === "sort-alphabetically") {
+  //   sortAlbumsAlphabetically();
+  // } else if (selection === "sort-by-date") {
+  //   sortAlbumsDate();
+  // } else if (selection === "sort-by-artist") {
+  //   sortAlbumsArtist();
+  // }
   playlistsOutputEl.innerHTML = "";
   let albumIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items;
@@ -380,19 +395,13 @@ function getLikedSongsDiv(i) {
   return divEl;
 }
 
-function likeSong(e, checked) {
+function likeSong(e) {
   let trackIndex = +e.currentTarget.dataset.index;
   let albumIndex = outputEl.getAttribute("albumIndex");
   let trackAlbumImg = library[albumIndex].album.images[2].url;
   let trackAlbumName = library[albumIndex].album.name;
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
-  saveLikedSongs(
-    checked,
-    albumIndex,
-    trackAlbumName,
-    trackAlbumImg,
-    trackItems
-  );
+  saveLikedSongs(albumIndex, trackAlbumName, trackAlbumImg, trackItems);
 }
 
 function showLikedSongs() {
@@ -405,18 +414,10 @@ function showLikedSongs() {
 }
 
 // Local Storage
-function saveLikedSongs(
-  checked,
-  albumIndex,
-  trackAlbumName,
-  trackAlbumImg,
-  trackItems
-) {
-  trackItems.checked = checked;
+function saveLikedSongs(albumIndex, trackAlbumName, trackAlbumImg, trackItems) {
   trackItems.trackAlbumImg = trackAlbumImg;
   trackItems.trackAlbumName = trackAlbumName;
   trackItems.albumIndex = albumIndex;
-  trackItems.liked = !trackItems.liked;
 
   // if
   likedSongs.push(trackItems);
