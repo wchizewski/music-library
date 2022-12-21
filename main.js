@@ -9,7 +9,6 @@ let albumOutputEl = document.getElementById("album-output");
 let playlistsOutputEl = document.getElementById("playlists");
 let searchMenuEl = document.getElementById("search-menu");
 let searchBarEl = document.getElementById("search-bar");
-let selection = menu1El.value;
 
 // Array
 let library = [];
@@ -17,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQCaSLCzC_3h3pDEWVItuZmTexH-y8g2OYIkjbZ_uJJSJ8oVQKXFBN3sThfVNAFSfTyFWONxx7tGGOPTdnSksynit-SpcDEMoVlMqxW25nmLxjasPaQ1Yx7kR4Dlhy4N6fdOvfwNXaDpwOwEwAUNrQbmnijNdfWPqcz39vvf-gV-Zo6aSH2NB4LiWO1knQOMi01n8rwzvQo34ytV";
+  "BQBy7DOus1DtAY9nfZmJBH_LnMpYbg_bNiNMyBT7XDrxGl0axkptCp4mEy1jO9s4msMVrGQ-9lBpt7-nqzdhttrq2iSLuG4-7JN3G6YzBfi0mcMHCVJNNN0p2UpXMmWSgs21Bb0JcJy8mmDVp68TFtm8dgjJcZXNJ4vANYnoSPCQgoC-mYjVEOhQ4dGdJvpcWESWjtk2Kxyc16v6";
 let albumNum = 5000;
 processData();
 
@@ -48,6 +47,7 @@ sortReverseBtn.addEventListener("click", sortReverseBtnHandler);
 
 function menuHandler() {
   // Get Menu Selection
+  let selection = menu1El.value;
   if (selection === "sort-alphabetically") {
     sortAlbumsAlphabetically();
   } else if (selection === "sort-by-date") {
@@ -282,13 +282,10 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
       likedSongs[n].duration_ms === trackItems[i].duration_ms
     ) {
       checkboxEl.checked = true;
+    } else {
+      checkboxEl.checked = false;
     }
   }
-
-  // if (checkboxEl.checked === false) {
-  //   likedSongs.pop(trackItems[i]);
-  //   console.log(trackItems.pop(trackItems[i]));
-  // }
 
   checkboxEl.addEventListener("input", likeSong);
 
@@ -326,13 +323,6 @@ function getSongArtistsStr(trackItems) {
 
 // Open Album
 function openAlbum(e) {
-  // if (selection === "sort-alphabetically") {
-  //   sortAlbumsAlphabetically();
-  // } else if (selection === "sort-by-date") {
-  //   sortAlbumsDate();
-  // } else if (selection === "sort-by-artist") {
-  //   sortAlbumsArtist();
-  // }
   playlistsOutputEl.innerHTML = "";
   let albumIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items;
@@ -351,7 +341,6 @@ function openAlbum(e) {
         songArtistsStr += songArtists.name + ", ";
       }
     });
-    // for (let n; n < likedSongs.length; n++) {}
     // let songArtistsStr = getSongArtistsStr(trackItems);
     let duration_ms = trackItems[i].duration_ms;
     albumOutputEl.appendChild(
