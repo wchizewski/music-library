@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQBy7DOus1DtAY9nfZmJBH_LnMpYbg_bNiNMyBT7XDrxGl0axkptCp4mEy1jO9s4msMVrGQ-9lBpt7-nqzdhttrq2iSLuG4-7JN3G6YzBfi0mcMHCVJNNN0p2UpXMmWSgs21Bb0JcJy8mmDVp68TFtm8dgjJcZXNJ4vANYnoSPCQgoC-mYjVEOhQ4dGdJvpcWESWjtk2Kxyc16v6";
+  "BQAHojlS-5UiYudd3zpVvftPy2mrRi_KEF9D-DJbOdrN4hsQGexSqbnJG4RzqZ8v13iCOXrploguspQWwRsWa3l2AUYR9dRJuJSWBkhbuF6k0H-enK0tPUqlCcJPNqgURQb-11l4CfDJpgpBikGNwgfxfgiiYSwCI43JYqPwqSe_0JbyoQEsM261yRxpPbNw2yzvuNsQwwxEZabZ";
 let albumNum = 5000;
 processData();
 
@@ -265,7 +265,6 @@ function openAlbumDiv(album, artistStr) {
 
 // Open Album Function: Tracklist + Like Btn
 function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
-  console.log(trackItems[i]);
   // p (tracklistEl)
   let tracklistEl = document.createElement("p");
   tracklistEl.className = "albumTracks";
@@ -276,16 +275,15 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
   let checkboxEl = document.createElement("input");
   checkboxEl.type = "checkbox";
   checkboxEl.dataset.index = i;
-  for (let n = 0; n < likedSongs.length; n++) {
-    if (
-      likedSongs[n].name === trackItems[i].name &&
-      likedSongs[n].duration_ms === trackItems[i].duration_ms
-    ) {
-      checkboxEl.checked = true;
-    } else {
-      checkboxEl.checked = false;
-    }
-  }
+  // for (let n = 0; n < likedSongs.length; n++) {
+  //   if (
+  //     likedSongs[n].name === trackItems[i].name &&
+  //     likedSongs[n].duration_ms === trackItems[i].duration_ms
+  //   ) {
+  //     checkboxEl.checked = true;
+  //     break;
+  //   }
+  // }
 
   checkboxEl.addEventListener("input", likeSong);
 
@@ -344,13 +342,7 @@ function openAlbum(e) {
     // let songArtistsStr = getSongArtistsStr(trackItems);
     let duration_ms = trackItems[i].duration_ms;
     albumOutputEl.appendChild(
-      getTracklistDiv(
-        // n,
-        i,
-        songArtistsStr,
-        trackItems,
-        getDuration(duration_ms)
-      )
+      getTracklistDiv(i, songArtistsStr, trackItems, getDuration(duration_ms))
     );
   }
 }
@@ -385,10 +377,16 @@ function getLikedSongsDiv(i) {
 }
 
 function likeSong(e) {
-  let trackIndex = +e.currentTarget.dataset.index;
+  // Process Checkbox Clicked (liking or unliking)
+  // if (e.target.checked === false) {
+  //   console.log("hi");
+  //   likedSongs.pop(likedSongs[n]);
+  //   console.log(likedSongs[n]);
+  // }
   let albumIndex = outputEl.getAttribute("albumIndex");
   let trackAlbumImg = library[albumIndex].album.images[2].url;
   let trackAlbumName = library[albumIndex].album.name;
+  let trackIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
   saveLikedSongs(albumIndex, trackAlbumName, trackAlbumImg, trackItems);
 }
