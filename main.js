@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQBwW1OUgwTYh6p12pNh9GCjlWS6TJm3iF6cxBawMP_YPvg7MNhwVrAuphVsIjvvBCoKQe73c985siBtyNwyWAOFmLSkgCYZ3gMcY2_6T_fM5vIK5cSv1OBkb_AELsKUaIrbuTHeugdrY5E9h6kutpqEsC7TlN9S00hsSoS1Yf6vwgoZUPJ2PEo04CSK6qmJ46UC8cLLkXqa05gD";
+  "BQA4m9sjfOXoCnLJMrXjK7PSqhztdfzJ9EzLMubC1i23hKYM6O8yVvNKIQasyt8XyJua1BYCzXw2n2Y6RihwwCMgF8PxOuBimPX3jZsYYimg6kPsyx-UP5nVKf6pyKftCMX2hZSkNcaoDPY7HPbTZOmFvX13xnD2S9ltt7plhyZe9uMKOWmEP3UXmAs9SbTUpPB2TtyDoZvBVZK_";
 let albumNum = 5000;
 processData();
 
@@ -368,17 +368,17 @@ function likeSong(e) {
   let trackAlbumName = library[albumIndex].album.name;
   let trackIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
-  for (let n = 0; n < likedSongs.length; n++) {
-    if (
-      likedSongs[n].name === trackItems[trackIndex].name &&
-      likedSongs[n].duration_ms === trackItems[trackIndex].duration_ms &&
-      e.target.checked === false
-    ) {
-      console.log("hi");
-      likedSongs.pop(likedSongs[n]);
-      console.log(likedSongs[n]);
-    }
-  }
+  // for (let n = 0; n < likedSongs.length; n++) {
+  //   if (
+  //     likedSongs[n].name === trackItems[trackIndex].name &&
+  //     likedSongs[n].duration_ms === trackItems[trackIndex].duration_ms &&
+  //     e.target.checked === false
+  //   ) {
+  //     console.log("hi");
+  //     likedSongs.pop(likedSongs[n]);
+  //     console.log(likedSongs[n]);
+  //   }
+  // }
 
   saveLikedSongs(albumIndex, trackAlbumName, trackAlbumImg, trackItems);
 }
