@@ -16,7 +16,7 @@ let likedSongs = loadLikedSongs();
 
 // Token
 let token =
-  "BQAeWlrO_QFauMwkyo05dQiqez5nhCVOtl0R_V9yYodhsf22bldC_0SaWn3noTxN_wzqFWm-GdgMYDyMcVs2YQ6B_qYjc1B5zZt47cfHknE8Bxxk9j7zccUAwft-BrW57HUFNL8IAbBo3ST6XHalcEJp5L-a3VsvYMzV8xpO85PHzsfCZ0Fdh5e5fVU7mAWYn_FkuonaVR0m4LXG";
+  "BQB__-zUDL6fvyzlDnc3JTmNgyMrWCv_pUdgW-dkxFXcP00oMmbGoILEcv4NZu9OpYoTZpCd5VvhsJo4aUMNEsL20LQqh-BYTCao5hr_J7kp1hDhoJv97stS0_SlNgrnDkVz1IJJsX8m0VY1omXMLON5K7dHub6KvdjfbH_SeWxkysfK_9_OU3njVgN8ILcDO3YMVwTZXDkMS_U8";
 let albumNum = 5000;
 processData();
 
@@ -194,11 +194,11 @@ function getArtistStr(album) {
 function getSongArtistsStr(trackItems) {
   let songArtists = trackItems.artists;
   let songArtistsStr = "";
-  songArtists.forEach((songArtists, index) => {
+  songArtists.forEach((songArtist, index) => {
     if (index + 1 == songArtists.length) {
-      songArtistsStr += songArtists.name;
+      songArtistsStr += songArtist.name;
     } else {
-      songArtistsStr += songArtists.name + ", ";
+      songArtistsStr += songArtist.name + ", ";
     }
   });
   return songArtistsStr;
@@ -281,8 +281,7 @@ function getTracklistDiv(i, songArtistsStr, trackItems, duration) {
     //   likedSongs.pop(likedSongs[n]);
     // }
   }
-
-  checkboxEl.addEventListener("input", likeSong);
+  checkboxEl.addEventListener("input", changeLike);
 
   // div
   let divEl = document.createElement("div");
@@ -315,16 +314,8 @@ function openAlbum(e) {
   let artistStr = getArtistStr(album);
   albumOutputEl.appendChild(openAlbumDiv(album, artistStr));
   for (let i = 0; i < trackItems.length; i++) {
-    let songArtists = trackItems[i].artists;
-    let songArtistsStr = "";
-    songArtists.forEach((songArtists, index) => {
-      if (index + 1 == songArtists.length) {
-        songArtistsStr += songArtists.name;
-      } else {
-        songArtistsStr += songArtists.name + ", ";
-      }
-    });
-    // let songArtistsStr = getSongArtistsStr(trackItems);
+    let songArtistsStr = getSongArtistsStr(trackItems[i]);
+
     let duration_ms = trackItems[i].duration_ms;
     albumOutputEl.appendChild(
       getTracklistDiv(i, songArtistsStr, trackItems, getDuration(duration_ms))
@@ -348,7 +339,8 @@ function getLikedSongsDiv(i) {
   pEl.innerHTML =
     likedSongs[i].name +
     " by " +
-    "[artist(s)] • " +
+    likedSongs[i].trackArtists +
+    " • " +
     likedSongs[i].trackAlbumName +
     "<br>";
   pEl.appendChild(imgEl);
@@ -361,45 +353,63 @@ function getLikedSongsDiv(i) {
   return divEl;
 }
 
-function likeSong(e) {
+// Handle Liking and Unliking
+function changeLike(e) {
+  let albumIndex = outputEl.getAttribute("albumIndex");
+
+  if (e.currentTarget.checked) {
+    likeSong(albumIndex, e);
+  } else {
+    unlikeSong(albumIndex);
+  }
+}
+
+function unlikeSong(albumIndex) {
+  let index = likedSongs.findIndex((e) => e.albumIndex == albumIndex);
+  likedSongs.splice(index, 1);
+  saveLikedSongs(albumIndex);
+}
+
+function likeSong(albumIndex, e) {
   // Process Checkbox Clicked (liking or unliking)
 
-  let albumIndex = outputEl.getAttribute("albumIndex");
   let trackAlbumImg = library[albumIndex].album.images[2].url;
   let trackAlbumName = library[albumIndex].album.name;
   let trackIndex = +e.currentTarget.dataset.index;
   let trackItems = library[albumIndex].album.tracks.items[trackIndex];
-  // for (let n = 0; n < likedSongs.length; n++) {
-  //   if (
-  //     likedSongs[n].name === trackItems[trackIndex].name &&
-  //     likedSongs[n].duration_ms === trackItems[trackIndex].duration_ms &&
-  //     e.target.checked === false
-  //   ) {
-  //     console.log("hi");
-  //     likedSongs.pop(likedSongs[n]);
-  //     console.log(likedSongs[n]);
-  //   }
-  // }
-
-  saveLikedSongs(albumIndex, trackAlbumName, trackAlbumImg, trackItems);
+  let trackArtists = getSongArtistsStr(trackItems);
+  saveLikedSongs(
+    albumIndex,
+    trackAlbumName,
+    trackAlbumImg,
+    trackItems,
+    trackArtists
+  );
 }
 
+// Show liked Songs
 function showLikedSongs() {
   outputEl.innerHTML = "";
   albumOutputEl.innerHTML = "";
   playlistsOutputEl.innerHTML = "Liked Songs:<br>";
-  for (let i = 0; i < library.length; i++) {
+  for (let i = 0; i < likedSongs.length; i++) {
     playlistsOutputEl.appendChild(getLikedSongsDiv(i));
   }
 }
 
 // Local Storage
-function saveLikedSongs(albumIndex, trackAlbumName, trackAlbumImg, trackItems) {
+function saveLikedSongs(
+  albumIndex,
+  trackAlbumName,
+  trackAlbumImg,
+  trackItems,
+  trackArtists
+) {
   trackItems.trackAlbumImg = trackAlbumImg;
   trackItems.trackAlbumName = trackAlbumName;
   trackItems.albumIndex = albumIndex;
+  trackItems.trackArtists = trackArtists;
 
-  // if
   likedSongs.push(trackItems);
   localStorage.setItem("trackItems", JSON.stringify(likedSongs));
 }
